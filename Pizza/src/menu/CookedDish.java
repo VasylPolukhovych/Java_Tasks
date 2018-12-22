@@ -1,16 +1,18 @@
 package menu;
+
 import java.time.LocalDate;
 
 
-public class CookedDish {
+public class CookedDish  {
   private int idCookedDish;
   private int count;
   private LocalDate dateOfMaking;
 
   private Dish dish;
 
-  public CookedDish() {
-  }
+
+  public CookedDish()
+  {  }
 
   public int getCount() {
     return count;
@@ -43,4 +45,5 @@ public class CookedDish {
   public void setIdCookedDish(int idCookedDish) {
     this.idCookedDish = idCookedDish;
   }
+
 }

@@ -1,10 +1,10 @@
 package menu;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Formatter;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 
-public class Dish {
+public class Dish  implements Comparable<Dish>{
     private int idDish;
     private String nameDish;
     private float costOfCosts;
@@ -52,5 +52,24 @@ public class Dish {
 
     public void setIdDish(int idDish) {
         this.idDish = idDish;
+    }
+
+    @Override
+    public int compareTo(@NotNull Dish o) {
+        return nameDish.compareTo(o.getNameDish() );
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Dish dish = (Dish) o;
+        return Objects.equals(nameDish, dish.nameDish);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nameDish);
     }
 }

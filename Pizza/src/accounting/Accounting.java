@@ -1,27 +1,38 @@
 package accounting;
-import java.util.Arrays;
+
 import order.*;
 import menu.*;
+
+import java.util.*;
+
 public class Accounting implements IAccounting {
 
-    public Orders addElement(Orders orders, Order element) {
-        Order[] ordAr;
-        ordAr = Arrays.copyOf(orders.getOrders(), orders.getOrders().length + 1);
-        orders.setOrders(ordAr);
-        orders.getOrders()[orders.getOrders().length - 1] = element;
-        return orders;
-    }
+    public void minusDish(LinkedList<CookedDish> menu, Order ord) {
+        for (Map.Entry<String, SelectedDishes> o : ord.getSelectedDishes().entrySet()) {
+            int cnt = o.getValue().getCount();
+            LinkedList<CookedDish> forDel = new LinkedList<>();
+            for (CookedDish m : menu) {
 
-    public void minusDish(Menu menu, Order ord) {
-        CookedDish cookedDishW = new CookedDish();
-
-        for (int j = 0; j < ord.getArrayDishs().length; j++) {
-
-            for (int i = 0; i < menu.getMenu().length; i++) {
-                if (menu.getMenu()[i].getIdCookedDish() == ord.getArrayDishs()[j].getCookedDishId()) {
-                    menu.getMenu()[i].setCount(menu.getMenu()[i].getCount() - ord.getArrayDishs()[j].getCount());
-               }
+                if (o.getKey().equalsIgnoreCase(m.getDish().getNameDish())) {
+                    m.setCount(m.getCount() - cnt);
+                    if (m.getCount() <= 0) {
+                        cnt = m.getCount() * (-1);
+                        forDel.add(m);
+                    }
+                }
             }
+            menu.removeAll(forDel);
         }
     }
+
+    public Integer addOrderToOrders(Order ord, HashMap<Integer, Order> orders) {
+        Integer orderKey = 1;
+        if (!(orders.entrySet().isEmpty())) {
+            orderKey = Collections.max(orders.keySet()) + 1;
+        }
+        orders.put(orderKey, ord);
+        return orderKey;
+    }
+
+
 }

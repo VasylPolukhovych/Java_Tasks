@@ -1,26 +1,37 @@
 package order;
+import javafx.collections.transformation.SortedList;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.TreeSet;
+
 
 public class Order {
-    int idOrder;
-    int tip;
-    float price;
-    LocalDate orderDate;
-    DishForOrder[] arrayDishs;
+    private HashMap<String,SelectedDishes> selectedDishes;
+    private LocalDate date;
+    private int tip;
+    private float summa;
 
     public Order() {
     }
 
-    public Order(DishForOrder[] arrayDishs) {
-        this.arrayDishs = arrayDishs;
+
+    public HashMap<String, SelectedDishes> getSelectedDishes() {
+        return selectedDishes;
     }
 
-    public int getIdOrder() {
-        return idOrder;
+    public void setSelectedDishes(HashMap<String, SelectedDishes> selectedDishes) {
+        this.selectedDishes = selectedDishes;
     }
 
-    public void setIdOrder(int idOrder) {
-        this.idOrder = idOrder;
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public int getTip() {
@@ -31,29 +42,11 @@ public class Order {
         this.tip = tip;
     }
 
-    public LocalDate getOrderDate() {
-        return orderDate;
+    public float getSumma() {
+        return summa;
     }
 
-    public void setOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
+    public void setSumma(float summa) {
+        this.summa = summa;
     }
-
-    public DishForOrder[] getArrayDishs() {
-        return arrayDishs;
-    }
-
-    public void setArrayDishs(DishForOrder[] arrayDishs) {
-        this.arrayDishs = arrayDishs;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-
 }
