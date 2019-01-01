@@ -1,38 +1,22 @@
 package accounting;
+import common.Identifier;
+import menu.CookedDish;
+import menu.CookedDishes;
+import menu.Menu;
+import order.Order;
 
-import order.*;
-import menu.*;
+public interface Accounting {
 
-import java.util.*;
+    void addDishToList(CookedDish cookedDish, CookedDishes dishes);
 
-public class Accounting implements IAccounting {
+    Identifier addOrderToOrders(Order order, Orders orders);
 
-    public void minusDish(LinkedList<CookedDish> menu, Order ord) {
-        for (Map.Entry<String, SelectedDishes> o : ord.getSelectedDishes().entrySet()) {
-            int cnt = o.getValue().getCount();
-            LinkedList<CookedDish> forDel = new LinkedList<>();
-            for (CookedDish m : menu) {
+    void disposeOfOverdueDishes (CookedDishes menu);
 
-                if (o.getKey().equalsIgnoreCase(m.getDish().getNameDish())) {
-                    m.setCount(m.getCount() - cnt);
-                    if (m.getCount() <= 0) {
-                        cnt = m.getCount() * (-1);
-                        forDel.add(m);
-                    }
-                }
-            }
-            menu.removeAll(forDel);
-        }
-    }
+    CookedDishes getAllCookeddishes();
 
-    public Integer addOrderToOrders(Order ord, HashMap<Integer, Order> orders) {
-        Integer orderKey = 1;
-        if (!(orders.entrySet().isEmpty())) {
-            orderKey = Collections.max(orders.keySet()) + 1;
-        }
-        orders.put(orderKey, ord);
-        return orderKey;
-    }
+    CookedDishes getSpoiledDishes();
 
-
+    Orders getOrders();
 }
+

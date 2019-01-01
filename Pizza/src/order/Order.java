@@ -1,28 +1,23 @@
 package order;
-import javafx.collections.transformation.SortedList;
+import common.Money;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.TreeSet;
-
 
 public class Order {
-    private HashMap<String,SelectedDishes> selectedDishes;
+    private HashMap<String, DishInOrder> selectedDishes;
     private LocalDate date;
-    private int tip;
-    private float summa;
+    private Long tip;
+    private Money summa;
 
     public Order() {
     }
 
-
-    public HashMap<String, SelectedDishes> getSelectedDishes() {
+    public HashMap<String, DishInOrder> getSelectedDishes() {
         return selectedDishes;
     }
 
-    public void setSelectedDishes(HashMap<String, SelectedDishes> selectedDishes) {
+    public void setSelectedDishes(HashMap<String, DishInOrder> selectedDishes) {
         this.selectedDishes = selectedDishes;
     }
 
@@ -34,19 +29,19 @@ public class Order {
         this.date = date;
     }
 
-    public int getTip() {
+    public Long getTip() {
         return tip;
     }
 
-    public void setTip(int tip) {
+    public void setTip(Long tip) {
         this.tip = tip;
     }
 
-    public float getSumma() {
+    public Money getSumma() {
         return summa;
     }
 
-    public void setSumma(float summa) {
-        this.summa = summa;
+    public void setSumma(double summa) {
+        this.summa = new Money(summa);
     }
 }
