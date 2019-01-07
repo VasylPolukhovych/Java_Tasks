@@ -1,15 +1,14 @@
 package menu;
-import org.jetbrains.annotations.NotNull;
-
+import common.Identifier;
+import common.Money;
 import java.util.Objects;
 
-
-public class Dish  implements Comparable<Dish>{
-    private int idDish;
+public class Dish  implements Comparable<Dish> {
+    private Identifier idDish = new Identifier();
     private String nameDish;
-    private float costOfCosts;
-    private float price;
-    private int   expirationDate;
+    private Money costOfCosts;
+    private Money price;
+    private Long expirationDate;
 
     public Dish() {
     }
@@ -22,42 +21,38 @@ public class Dish  implements Comparable<Dish>{
         this.nameDish = nameDish;
     }
 
-    public float getCostOfCosts() {
+    public Money getCostOfCosts() {
         return costOfCosts;
     }
 
-    public void setCostOfCosts(float costOfCosts) {
-        this.costOfCosts = costOfCosts;
+    public void setCostOfCosts(double costOfCosts) {
+        this.costOfCosts = new Money(costOfCosts);
     }
 
-    public float getPrice() {
+    public Money getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
-        this.price = price;
+    public void setPrice(double price) {
+        this.price = new Money(price);
+
     }
 
-    public int getExpirationDate() {
+    public Long getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(int expirationDate) {
+    public void setExpirationDate(Long expirationDate) {
         this.expirationDate = expirationDate;
     }
 
-    public int getIdDish() {
+    public Identifier getIdDish() {
         return idDish;
     }
 
-    public void setIdDish(int idDish) {
-        this.idDish = idDish;
-    }
-
     @Override
-    public int compareTo(@NotNull Dish o) {
-        return nameDish.compareTo(o.getNameDish() );
-
+    public int compareTo(Dish o) {
+        return nameDish.compareTo(o.getNameDish());
     }
 
     @Override

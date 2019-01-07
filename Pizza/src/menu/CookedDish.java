@@ -1,24 +1,22 @@
 package menu;
 
+import common.Identifier;
 import java.time.LocalDate;
 
-
-public class CookedDish  {
-  private int idCookedDish;
-  private int count;
+public class CookedDish {
+  private Identifier idCookedDish = new Identifier();
+  private Long count;
   private LocalDate dateOfMaking;
-
   private Dish dish;
 
+  public CookedDish() {
+  }
 
-  public CookedDish()
-  {  }
-
-  public int getCount() {
+  public Long getCount() {
     return count;
   }
 
-  public void setCount(int count) {
+  public void setCount(Long count) {
     this.count = count;
   }
 
@@ -38,12 +36,8 @@ public class CookedDish  {
     this.dish = dish;
   }
 
-  public int getIdCookedDish() {
+  public Identifier getIdCookedDish() {
     return idCookedDish;
-  }
-
-  public void setIdCookedDish(int idCookedDish) {
-    this.idCookedDish = idCookedDish;
   }
 
 }
