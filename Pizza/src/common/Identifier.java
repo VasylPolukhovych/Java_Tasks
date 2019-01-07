@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Identifier {
     static private Integer nextId = 0;
-    private Integer id = 1;
+    private int id = 1;
 
     public Identifier() {
         setIdToNextValue();
