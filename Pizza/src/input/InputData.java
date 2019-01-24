@@ -6,7 +6,7 @@ public interface InputData {
 
     boolean isInputEnd();
 
-    Long inputLong();
+    Integer inputInt(String message);
 
     Map<String, Long> inputDetails();
 }

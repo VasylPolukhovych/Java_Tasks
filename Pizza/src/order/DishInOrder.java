@@ -2,29 +2,16 @@ package order;
 
 import menu.Dish;
 
-public class DishInOrder {
-    private Dish dish;
-    private Long count;
+public class DishInOrder extends Dish {
+    private int count;
 
-    public DishInOrder() {
+    public DishInOrder(int count,Dish dish) {
+        super(dish.getNameDish(),dish.getCostOfCosts(),dish.getPrice(),dish.getExpirationDate());
+        this.count =count;
     }
-
-    public Dish getDish() {
-        return dish;
-    }
-
-    public void setDish(Dish dish) {
-        this.dish = dish;
-    }
-
-    public Long getCount() {
+    public int getCount() {
         return count;
     }
-
-    public void setCount(Long count) {
-        this.count = count;
-    }
-
 
 }
 

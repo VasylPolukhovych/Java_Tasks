@@ -1,43 +1,42 @@
 package menu;
 
-import common.Identifier;
 import java.time.LocalDate;
+import java.util.Objects;
 
-public class CookedDish {
-  private Identifier idCookedDish = new Identifier();
-  private Long count;
-  private LocalDate dateOfMaking;
-  private Dish dish;
+public class CookedDish extends Dish {
+    private int count;
+    private LocalDate dateOfMaking;
 
-  public CookedDish() {
-  }
 
-  public Long getCount() {
-    return count;
-  }
+    public CookedDish(Dish dish, int count, LocalDate dateOfMaking) {
+        super(dish.getNameDish(), dish.getCostOfCosts(), dish.getPrice(), dish.getExpirationDate());
+        this.count = count;
+        this.dateOfMaking = dateOfMaking;
+    }
 
-  public void setCount(Long count) {
-    this.count = count;
-  }
+    public int getCount() {
+        return count;
+    }
 
-  public LocalDate getDateOfMaking() {
-    return dateOfMaking;
-  }
+    public LocalDate getDateOfMaking() {
+        return dateOfMaking;
+    }
 
-  public void setDateOfMaking(LocalDate dateOfMaking) {
-    this.dateOfMaking = dateOfMaking;
-  }
+    public Dish getDishDetails() {
+        return new Dish(this.getNameDish(), this.getCostOfCosts(), this.getPrice(), this.getExpirationDate());
+    }
 
-  public Dish getDish() {
-    return dish;
-  }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CookedDish cookedDish = (CookedDish) o;
+        return getNameDish().equals(cookedDish.getNameDish()) && (Objects.equals(dateOfMaking, cookedDish.dateOfMaking)) && count == cookedDish.count;
+    }
 
-  public void setDish(Dish dish) {
-    this.dish = dish;
-  }
-
-  public Identifier getIdCookedDish() {
-    return idCookedDish;
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(getNameDish(), dateOfMaking, count);
+    }
 
 }

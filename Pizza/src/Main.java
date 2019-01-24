@@ -20,11 +20,12 @@ public class Main {
     public static void main(String[] args) {
         menu.addDishs(6);
         menu.cookDishs(5,accounting);
-        reports.printMenu(menu.getMenu());
+        reports.printMenu(menu);
+        accounting.fillAllCookedDishsByMenu(menu);
         actionsWithClient.serveClient(menu,inputData,accounting);
-        reports.printMenu(menu.getMenu());
-        reports.printDishs(accounting.getAllCookeddishes(),"All cooked dishes");
-        accounting.disposeOfOverdueDishes(menu.getMenu());
+        reports.printMenu(menu);
+        reports.printDishs(accounting.getAllCookedDishes(),"All cooked dishes");
+        accounting.disposeOfOverdueDishes(menu);
         reports.printDishs(accounting.getSpoiledDishes(),"All spoiled dishes");
     }
 

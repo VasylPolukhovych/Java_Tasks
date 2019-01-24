@@ -3,20 +3,19 @@ package menu;
 import accounting.Accounting;
 import common.Identifier;
 import order.Order;
-import java.util.Set;
+
+import java.util.List;
+
 
 public interface Menu {
 
+    List<CookedDish> getCurrentMenu();
+    //Dish getDishByName(String name, Identifier id);
+    CookedDish findCookedDishInMenuByName(String nameDish);
+    int availableCountOfPortionsDishInMenu(String dishName, int neededCount);
+    boolean isExpirationDateExpired (int expirationDate,CookedDish cookedDish);
+    void useDishsFromCurrentMenuToOrder( Order order);
     void addDishs(int countOfDishs);
-
     void cookDishs(int countOfDishs, Accounting accounting);
-
-    Dish getDishByName(String name, Identifier id, Set<Dish> dishs);
-
-    CookedDish findMenuItem(String nameDish, CookedDishes currentMenu);
-
-    void useDishsFromCurrentMenuToOrder(CookedDishes currentMenu, Order ord);
-
-    CookedDishes getMenu();
 }
 
