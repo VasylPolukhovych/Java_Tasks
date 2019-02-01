@@ -1,53 +1,34 @@
 package menu;
-import common.Identifier;
 import common.Money;
 import java.util.Objects;
 
 public class Dish  implements Comparable<Dish> {
-    private Identifier idDish = new Identifier();
     private String nameDish;
     private Money costOfCosts;
     private Money price;
-    private Long expirationDate;
+    private int expirationDate;
 
-    public Dish() {
+    public Dish(String nameDish, Money costOfCosts, Money price, int expirationDate) {
+        this.nameDish = nameDish;
+        this.costOfCosts = costOfCosts;
+        this.price = price;
+        this.expirationDate = expirationDate;
     }
 
     public String getNameDish() {
         return nameDish;
     }
 
-    public void setNameDish(String nameDish) {
-        this.nameDish = nameDish;
-    }
-
     public Money getCostOfCosts() {
         return costOfCosts;
-    }
-
-    public void setCostOfCosts(double costOfCosts) {
-        this.costOfCosts = new Money(costOfCosts);
     }
 
     public Money getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        this.price = new Money(price);
-
-    }
-
-    public Long getExpirationDate() {
+    public int getExpirationDate() {
         return expirationDate;
-    }
-
-    public void setExpirationDate(Long expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public Identifier getIdDish() {
-        return idDish;
     }
 
     @Override

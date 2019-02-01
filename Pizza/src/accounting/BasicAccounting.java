@@ -2,62 +2,65 @@ package accounting;
 
 import common.Identifier;
 import menu.CookedDish;
-import menu.CookedDishes;
 import menu.Menu;
 import order.Order;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 
 public class BasicAccounting implements Accounting {
 
-    private CookedDishes allCookeddishes = new CookedDishes();
-    private CookedDishes spoiledDishes = new CookedDishes();
-    private Orders orders = new Orders();
+    private List<CookedDish> AllCookedDishes = new ArrayList<>();
+    private List<CookedDish> spoiledDishes = new ArrayList<>();
+    private Map<Identifier, Order> orders = new HashMap<>();
 
-    @Override
-    public void addDishToList(CookedDish cookedDish, CookedDishes dishes) {
-        dishes.getCookedDishes().add(cookedDish);
+    public BasicAccounting() {
+    }
+
+    private CookedDish createCopyCookedDish(CookedDish cookedDish) {
+        return new CookedDish(cookedDish.getDishDetails(), cookedDish.getCount(), cookedDish.getDateOfMaking());
     }
 
     @Override
-    public Identifier addOrderToOrders(Order order, Orders orders) {
-        Identifier orderKey = new Identifier();
-        orders.getOrders().put(orderKey, order);
-        return orderKey;
+    public List<CookedDish> getAllCookedDishes() {
+        return AllCookedDishes;
     }
 
     @Override
-    public void disposeOfOverdueDishes(CookedDishes menu) {
-        List<CookedDish> cookedDishesToRemoveFromMenu = new LinkedList<>();
-        for (CookedDish cookedDish : menu.getCookedDishes()) {
-            if (!(menu.isExpirationDateExpired(cookedDish.getDateOfMaking(), cookedDish.getDish().getExpirationDate()))) {
-                spoiledDishes.getCookedDishes().add(cookedDish);
-                cookedDishesToRemoveFromMenu.add(cookedDish);
-            }
-        }
-        menu.getCookedDishes().removeAll(cookedDishesToRemoveFromMenu);
-    }
-
-    @Override
-    public CookedDishes getAllCookeddishes() {
-        return allCookeddishes;
-    }
-
-
-    @Override
-    public CookedDishes getSpoiledDishes() {
+    public List<CookedDish> getSpoiledDishes() {
         return spoiledDishes;
     }
 
     @Override
-    public Orders getOrders() {
+    public Map<Identifier, Order> getOrders() {
         return orders;
     }
 
+
+    @Override
+    public Identifier addOrderToOrders(Order order) {
+        Identifier orderKey = new Identifier();
+        orders.put(orderKey, order);
+        return orderKey;
+    }
+
+    @Override
+    public void disposeOfOverdueDishes(Menu menu) {
+        List<CookedDish> cookedDishesToRemoveFromMenu = new ArrayList<>();
+        for (CookedDish cookedDish : menu.getCurrentMenu()) {
+            if (!(menu.isExpirationDateExpired(cookedDish.getExpirationDate(), cookedDish))) {
+                spoiledDishes.add(createCopyCookedDish(cookedDish));
+                cookedDishesToRemoveFromMenu.add(cookedDish);
+            }
+        }
+        menu.getCurrentMenu().removeAll(cookedDishesToRemoveFromMenu);
+    }
+
+    @Override
+    public void fillAllCookedDishsByMenu(Menu menu) {
+        for (CookedDish cookedDish : menu.getCurrentMenu()) {
+            AllCookedDishes.add(createCopyCookedDish(cookedDish));
+        }
+    }
 
 }
