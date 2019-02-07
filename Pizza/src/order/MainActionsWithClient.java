@@ -1,4 +1,5 @@
 package order;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -19,26 +20,51 @@ public class MainActionsWithClient implements ActionsWithClient {
     public MainActionsWithClient() {
     }
 
+    private int calculateCount(int totalCount, int neededCount, String name) {
+
+        if (totalCount >= neededCount) {
+            return neededCount;
+        } else {
+            StringJoiner warningString = new StringJoiner(" ");
+            warningString.add("Sorry, unfortunately but we have only");
+            warningString.add(((Integer) totalCount).toString());
+            warningString.add(name);
+            warningString.add("at the moment");
+            System.out.println(warningString);
+            return totalCount;
+        }
+    }
+
+
+    private void useDishsFromCurrentMenuToOrder(Menu menu) {
+        if (order != null) {
+            for (Map.Entry<String, DishInOrder> dishInOrder : order.getSelectedDishes().entrySet()) {
+                int count = dishInOrder.getValue().getCount();
+                String nameDish = dishInOrder.getKey();
+                menu.changeCount(nameDish, count);
+            }
+        }
+    }
+
     private Order fillOrder(Map<String, Long> orderDetails, int tip, Menu menu) {
         CookedDish orderedDish;
         HashMap<String, DishInOrder> orderedDishs = new HashMap<>();
-        int cnt = 0;
         for (Map.Entry<String, Long> orderDetail : orderDetails.entrySet()) {
             orderedDish = menu.findCookedDishInMenuByName((orderDetail.getKey()));
             if (orderedDish == null) {
-                List<String> strings = new ArrayList<>();
-                strings.add("Sorry, unfortunately but we don't have ");
-                strings.add(orderDetail.getKey());
-                strings.add(" at the moment");
-                report.printMesage(strings);
+                StringJoiner newString = new StringJoiner(" ");
+                newString.add("Sorry, unfortunately but we don't have");
+                newString.add(orderDetail.getKey());
+                newString.add("at the moment");
+                System.out.println(newString);
             } else {
-                int countDishInOrder = menu.availableCountOfPortionsDishInMenu(orderDetail.getKey(), orderDetail.getValue().intValue());
-                DishInOrder dishInOrder = new DishInOrder(countDishInOrder, orderedDish.getDishDetails());
-                cnt++;
+                int countPortions = menu.availableCount(orderDetail.getKey());
+                int countDish = calculateCount(countPortions, orderDetail.getValue().intValue(), orderDetail.getKey());
+                DishInOrder dishInOrder = new DishInOrder(countDish, orderedDish.getDishDetails());
                 orderedDishs.put(orderDetail.getKey(), dishInOrder);
             }
         }
-        if (cnt > 0) {
+        if (orderedDishs.size() > 0) {
             return new Order(orderedDishs, LocalDate.now(), tip);
         }
         return null;
@@ -46,10 +72,9 @@ public class MainActionsWithClient implements ActionsWithClient {
 
     @Override
     public void serveClient(Menu menu, InputData inputData, Accounting accounting) {
-
         order = fillOrder(inputDataOfOrder.inputDetails(), inputDataOfOrder.inputInt("Would you like to leave a tip?"), menu);
-        Identifier orderKey = accounting.addOrderToOrders(order);
-        menu.useDishsFromCurrentMenuToOrder(order);
+        Identifier orderKey = accounting.saveCompleted(order);
+        useDishsFromCurrentMenuToOrder(menu);
         report.printOrder(orderKey, accounting);
     }
 

@@ -9,7 +9,7 @@ public class CookedDish extends Dish {
 
 
     public CookedDish(Dish dish, int count, LocalDate dateOfMaking) {
-        super(dish.getNameDish(), dish.getCostOfCosts(), dish.getPrice(), dish.getExpirationDate());
+        super(dish.getNameDish(), dish.getCostOfCosts(), dish.getPrice(), dish.getShelfLife());
         this.count = count;
         this.dateOfMaking = dateOfMaking;
     }
@@ -23,7 +23,22 @@ public class CookedDish extends Dish {
     }
 
     public Dish getDishDetails() {
-        return new Dish(this.getNameDish(), this.getCostOfCosts(), this.getPrice(), this.getExpirationDate());
+        return new Dish(this.getNameDish(), this.getCostOfCosts(), this.getPrice(), this.getShelfLife());
+    }
+
+    public boolean isDishSpoiled(LocalDate date) {
+
+        if (dateOfMaking.plusDays(getShelfLife().toDays()).compareTo(date) > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean canDishBeSold(String nameDish, CookedDish cookedDish) {
+        boolean result = cookedDish.getNameDish().equalsIgnoreCase(nameDish);
+        result = result && cookedDish.getCount() > 0;
+        result = result && (!isDishSpoiled(LocalDate.now()));
+        return result;
     }
 
     @Override
