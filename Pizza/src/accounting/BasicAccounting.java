@@ -50,7 +50,7 @@ public class BasicAccounting implements Accounting {
                 cookedDishesToRemoveFromMenu.add(cookedDish);
             }
         }
-        menu.getCurrentMenu().removeAll(cookedDishesToRemoveFromMenu);
+        menu.removeDishsFromMenu(cookedDishesToRemoveFromMenu);
     }
 
     @Override

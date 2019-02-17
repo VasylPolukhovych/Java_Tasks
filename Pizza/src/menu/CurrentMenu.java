@@ -97,5 +97,10 @@ public class CurrentMenu implements Menu {
         return totalCount;
     }
 
+    @Override
+    public void removeDishsFromMenu(List<CookedDish> cookedDishesToRemoveFromMenu) {
+        currentMenu.removeAll(cookedDishesToRemoveFromMenu);
+
+    }
 
 }

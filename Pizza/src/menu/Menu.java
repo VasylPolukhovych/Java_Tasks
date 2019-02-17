@@ -15,5 +15,7 @@ public interface Menu {
     void addDishs(int countOfDishs);
 
     void cookDishs(int countOfDishs);
+
+    void removeDishsFromMenu(List<CookedDish> cookedDishesToRemoveFromMenu);
 }
 
