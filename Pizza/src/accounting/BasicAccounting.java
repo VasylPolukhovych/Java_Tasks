@@ -5,30 +5,27 @@ import menu.CookedDish;
 import menu.Menu;
 import order.Order;
 
+import java.time.LocalDate;
 import java.util.*;
 
 
 public class BasicAccounting implements Accounting {
 
-    private List<CookedDish> AllCookedDishes = new ArrayList<>();
+    private List<CookedDish> allCookedDishes = new ArrayList<>();
     private List<CookedDish> spoiledDishes = new ArrayList<>();
     private Map<Identifier, Order> orders = new HashMap<>();
 
     public BasicAccounting() {
     }
 
-    private CookedDish createCopyCookedDish(CookedDish cookedDish) {
-        return new CookedDish(cookedDish.getDishDetails(), cookedDish.getCount(), cookedDish.getDateOfMaking());
-    }
-
     @Override
     public List<CookedDish> getAllCookedDishes() {
-        return AllCookedDishes;
+        return Collections.unmodifiableList(allCookedDishes);
     }
 
     @Override
     public List<CookedDish> getSpoiledDishes() {
-        return spoiledDishes;
+        return Collections.unmodifiableList(spoiledDishes);
     }
 
     @Override
@@ -38,7 +35,7 @@ public class BasicAccounting implements Accounting {
 
 
     @Override
-    public Identifier addOrderToOrders(Order order) {
+    public Identifier saveCompleted(Order order) {
         Identifier orderKey = new Identifier();
         orders.put(orderKey, order);
         return orderKey;
@@ -48,18 +45,18 @@ public class BasicAccounting implements Accounting {
     public void disposeOfOverdueDishes(Menu menu) {
         List<CookedDish> cookedDishesToRemoveFromMenu = new ArrayList<>();
         for (CookedDish cookedDish : menu.getCurrentMenu()) {
-            if (!(menu.isExpirationDateExpired(cookedDish.getExpirationDate(), cookedDish))) {
-                spoiledDishes.add(createCopyCookedDish(cookedDish));
+            if (cookedDish.isDishSpoiled(LocalDate.now())) {
+                spoiledDishes.add(cookedDish);
                 cookedDishesToRemoveFromMenu.add(cookedDish);
             }
         }
-        menu.getCurrentMenu().removeAll(cookedDishesToRemoveFromMenu);
+        menu.removeDishsFromMenu(cookedDishesToRemoveFromMenu);
     }
 
     @Override
     public void fillAllCookedDishsByMenu(Menu menu) {
         for (CookedDish cookedDish : menu.getCurrentMenu()) {
-            AllCookedDishes.add(createCopyCookedDish(cookedDish));
+            allCookedDishes.add(cookedDish);
         }
     }
 

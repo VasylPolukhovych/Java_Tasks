@@ -6,10 +6,13 @@ import menu.CookedDish;
 import menu.Menu;
 import order.DishInOrder;
 import order.Order;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 public class Reports {
+
     public void printDishs(List<CookedDish> dishes, String reportName) {
         System.out.println("*****************************************");
         System.out.println(reportName);
@@ -23,7 +26,7 @@ public class Reports {
         System.out.println("*****************************************");
         System.out.println("Menu");
         for (CookedDish cookedDish : currentMenu.getCurrentMenu()) {
-            if (currentMenu.isExpirationDateExpired(cookedDish.getExpirationDate(), cookedDish)) {
+            if (!cookedDish.isDishSpoiled(LocalDate.now())) {
                 System.out.printf("Dish - %s . Count - %d . Price - %10.2f", cookedDish.getNameDish(), cookedDish.getCount(), cookedDish.getPrice().getCount());
                 System.out.println();
             }
@@ -41,7 +44,7 @@ public class Reports {
             int tip = orderForPrint.getTip();
             System.out.println("Bill #" + orderId.getId());
             for (Map.Entry<String, DishInOrder> i : orderForPrint.getSelectedDishes().entrySet()) {
-                System.out.printf("Dish - %s Count %d  Price %8.2f", i.getValue().getNameDish(), i.getValue().getCount(), i.getValue().getPrice().getCount());
+                System.out.printf("Dish - %s Count %d  Price %8.2f", i.getValue().getDish().getNameDish(), i.getValue().getCount(), i.getValue().getDish().getPrice().getCount());
                 System.out.println("");
             }
             System.out.println("________________________________________________");

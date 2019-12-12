@@ -1,18 +1,21 @@
 package menu;
+
 import common.Money;
+
+import java.time.Duration;
 import java.util.Objects;
 
-public class Dish  implements Comparable<Dish> {
+public class Dish implements Comparable<Dish> {
     private String nameDish;
     private Money costOfCosts;
     private Money price;
-    private int expirationDate;
+    private Duration shelfLife;
 
-    public Dish(String nameDish, Money costOfCosts, Money price, int expirationDate) {
+    public Dish(String nameDish, Money costOfCosts, Money price, Duration shelfLife) {
         this.nameDish = nameDish;
         this.costOfCosts = costOfCosts;
         this.price = price;
-        this.expirationDate = expirationDate;
+        this.shelfLife = shelfLife;
     }
 
     public String getNameDish() {
@@ -27,8 +30,8 @@ public class Dish  implements Comparable<Dish> {
         return price;
     }
 
-    public int getExpirationDate() {
-        return expirationDate;
+    public Duration getShelfLife() {
+        return shelfLife;
     }
 
     @Override

@@ -1,12 +1,14 @@
 package order;
+
 import common.Money;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Order {
-    private HashMap<String, DishInOrder> selectedDishes;
+    private Map<String, DishInOrder> selectedDishes;
     private LocalDate date;
     private int tip;
     private Money summa;
@@ -21,13 +23,13 @@ public class Order {
     private void calcOrderSum() {
         Money summa = new Money(0.00);
         for (Map.Entry<String, DishInOrder> item : selectedDishes.entrySet()) {
-            summa = summa.add(item.getValue().getPrice().multiply(item.getValue().getCount()));
+            summa = summa.add(item.getValue().getDish().getPrice().multiply(item.getValue().getCount()));
         }
         this.summa = summa;
     }
 
-    public HashMap<String, DishInOrder> getSelectedDishes() {
-        return selectedDishes;
+    public Map<String, DishInOrder> getSelectedDishes() {
+        return Collections.unmodifiableMap(selectedDishes);
     }
 
     public LocalDate getDate() {
