@@ -56,21 +56,6 @@ public class CurrentMenu implements Menu {
         }
 
 
-        for (CookedDish cookedDish : currentMenu) {
-            if (nameDish.equalsIgnoreCase(cookedDish.getNameDish())) {
-                int newCount = cookedDish.getCount() - count;
-                if (newCount <= 0) {
-                    count = newCount * (-1);
-                    forDeleting.add(cookedDish);
-                } else {
-                    forAdding.add(new CookedDish(cookedDish.getDishDetails(), newCount, cookedDish.getDateOfMaking()));
-                    forDeleting.add(cookedDish);
-                    break;
-                }
-            }
-        }
-        currentMenu.removeAll(forDeleting);
-        currentMenu.addAll(forAdding);
     }
 
     @Override
