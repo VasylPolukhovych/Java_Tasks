@@ -34,19 +34,17 @@ public class CurrentMenu implements Menu {
 
     @Override
     public void changeCount(String nameDish, int count) {
-        List<CookedDish> forDeleting = new ArrayList<>();
-        List<CookedDish> forAdding = new ArrayList<>();
         try {
             int newCount;
             newCount = currentMenu.stream()
-                    .filter(x -> nameDish.equalsIgnoreCase(x.getNameDish())).
-                            collect(Collectors.summingInt(((p) -> p.getCount()))) - count;
-            CookedDish tempCookedDish =
-                    currentMenu.stream()
-                            .filter(x -> nameDish.equalsIgnoreCase(x.getNameDish())).
-                            findAny().orElseThrow(() -> new Exception(nameDish +
-                            " not found in menu"));
-            currentMenu = currentMenu.stream().filter(x -> !nameDish.equalsIgnoreCase(x.getNameDish())).collect(Collectors.toList());
+                    .filter(x -> nameDish.equalsIgnoreCase(x.getNameDish()))
+                    .collect(Collectors.summingInt(((p) -> p.getCount()))) - count;
+            CookedDish tempCookedDish = currentMenu.stream()
+                            .filter(x -> nameDish.equalsIgnoreCase(x.getNameDish()))
+                            .findAny().orElseThrow(() -> new Exception(nameDish + " not found in menu"));
+            currentMenu = currentMenu.stream()
+                    .filter(x -> !nameDish.equalsIgnoreCase(x.getNameDish()))
+                    .collect(Collectors.toList());
             if (newCount > 0) {
                 tempCookedDish.setCount(newCount);
                 currentMenu.add(tempCookedDish);
