@@ -1,6 +1,6 @@
-package order;
+package pizza.order;
 
-import menu.Dish;
+import pizza.menu.Dish;
 
 public class DishInOrder {
     private Dish dish;

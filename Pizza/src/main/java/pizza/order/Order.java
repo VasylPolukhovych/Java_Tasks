@@ -1,6 +1,6 @@
-package order;
+package pizza.order;
 
-import common.Money;
+import pizza.common.Money;
 
 import java.time.LocalDate;
 import java.util.Collections;

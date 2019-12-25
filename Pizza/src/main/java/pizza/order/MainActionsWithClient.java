@@ -1,15 +1,16 @@
-package order;
+package pizza.order;
 
 import java.time.LocalDate;
 import java.util.*;
 
-import accounting.Accounting;
-import common.Identifier;
-import input.InputData;
-import input.InputDataOfOrder;
-import menu.CookedDish;
-import menu.Menu;
-import output.Reports;
+import pizza.accounting.Accounting;
+import pizza.common.Identifier;
+import pizza.exception.OrderNotfoundException;
+import pizza.input.InputData;
+import pizza.input.InputDataOfOrder;
+import pizza.menu.CookedDish;
+import pizza.menu.Menu;
+import pizza.output.Reports;
 
 
 public class MainActionsWithClient implements ActionsWithClient {
@@ -71,11 +72,13 @@ public class MainActionsWithClient implements ActionsWithClient {
     }
 
     @Override
-    public void serveClient(Menu menu, InputData inputData, Accounting accounting) {
+    public void serveClient(Menu menu, InputData inputData, Accounting accounting)  {
         order = fillOrder(inputDataOfOrder.inputDetails(), inputDataOfOrder.inputInt("Would you like to leave a tip?"), menu);
         Identifier orderKey = accounting.saveCompleted(order);
         useDishsFromCurrentMenuToOrder(menu);
+
         report.printOrder(orderKey, accounting);
+
     }
 
 }

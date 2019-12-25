@@ -1,11 +1,16 @@
-import accounting.BasicAccounting;
-import input.InputData;
-import input.InputDataOfOrder;
-import menu.CurrentMenu;
-import menu.Menu;
-import order.ActionsWithClient;
-import order.MainActionsWithClient;
-import output.Reports;
+package pizza;
+import pizza.accounting.BasicAccounting;
+import pizza.common.Identifier;
+import pizza.exception.OrderNotfoundException;
+import pizza.input.InputData;
+import pizza.input.InputDataOfOrder;
+import pizza.menu.CurrentMenu;
+import pizza.menu.Menu;
+import pizza.order.ActionsWithClient;
+import pizza.order.MainActionsWithClient;
+import pizza.output.Reports;
+
+import static java.awt.SystemColor.menu;
 
 public class Main {
 
@@ -17,9 +22,9 @@ public class Main {
     private static InputData inputData = new InputDataOfOrder();
 
 
-    public static void main(String[] args) {
-        menu.addDishs(6);
-        menu.cookDishs(5);
+    public static void main(String[] args)  {
+        menu.addDishs(7);
+        menu.cookDishs(6);
         reports.printMenu(menu);
         accounting.fillAllCookedDishsByMenu(menu);
         actionsWithClient.serveClient(menu, inputData, accounting);
@@ -27,6 +32,7 @@ public class Main {
         reports.printDishs(accounting.getAllCookedDishes(), "All cooked dishes");
         accounting.disposeOfOverdueDishes(menu);
         reports.printDishs(accounting.getSpoiledDishes(), "All spoiled dishes");
+        reports.printOrder(new Identifier(),accounting);
     }
 
 

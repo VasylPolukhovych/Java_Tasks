@@ -1,4 +1,4 @@
-package common;
+package pizza.common;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

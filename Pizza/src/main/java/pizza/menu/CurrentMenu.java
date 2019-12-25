@@ -1,10 +1,11 @@
-package menu;
+package pizza.menu;
 
-import common.Money;
+import pizza.common.Money;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class CurrentMenu implements Menu {
@@ -26,16 +27,35 @@ public class CurrentMenu implements Menu {
 
     private CookedDish createRandomCookedDish(Dish dish) {
         int count = rd.nextInt(100);
-        LocalDate dateOfMaking = LocalDate.of(2019, 2, rd.nextInt(27) + 1);
+        LocalDate dateOfMaking = LocalDate.of(2019, 12, rd.nextInt(27) + 1);
         return new CookedDish(dish, count, dateOfMaking);
 
     }
-
 
     @Override
     public void changeCount(String nameDish, int count) {
         List<CookedDish> forDeleting = new ArrayList<>();
         List<CookedDish> forAdding = new ArrayList<>();
+        try {
+            int newCount;
+            newCount = currentMenu.stream()
+                    .filter(x -> nameDish.equalsIgnoreCase(x.getNameDish())).
+                            collect(Collectors.summingInt(((p) -> p.getCount()))) - count;
+            CookedDish tempCookedDish =
+                    currentMenu.stream()
+                            .filter(x -> nameDish.equalsIgnoreCase(x.getNameDish())).
+                            findAny().orElseThrow(() -> new Exception(nameDish +
+                            " not found in menu"));
+            currentMenu = currentMenu.stream().filter(x -> !nameDish.equalsIgnoreCase(x.getNameDish())).collect(Collectors.toList());
+            if (newCount > 0) {
+                tempCookedDish.setCount(newCount);
+                currentMenu.add(tempCookedDish);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         for (CookedDish cookedDish : currentMenu) {
             if (nameDish.equalsIgnoreCase(cookedDish.getNameDish())) {
                 int newCount = cookedDish.getCount() - count;
@@ -60,14 +80,11 @@ public class CurrentMenu implements Menu {
 
     @Override
     public CookedDish findCookedDishInMenuByName(String nameDish) {
-        for (CookedDish cookedDish : currentMenu) {
-            if (cookedDish.canDishBeSold(nameDish, cookedDish)) {
-                return cookedDish;
-            }
-        }
-        return null;
-    }
 
+        return currentMenu.stream().filter(x -> x.getNameDish().equalsIgnoreCase(nameDish)
+                && x.getCount() > 0 && (!x.isDishSpoiled(LocalDate.now()))).findFirst().orElse(null);
+
+    }
 
     @Override
     public void addDishs(int countOfDishs) {
@@ -88,13 +105,9 @@ public class CurrentMenu implements Menu {
 
     @Override
     public int availableCount(String dishName) {
-        int totalCount = 0;
-        for (CookedDish cookedDish : currentMenu) {
-            if (cookedDish.getNameDish().equalsIgnoreCase(dishName)) {
-                totalCount = totalCount + cookedDish.getCount();
-            }
-        }
-        return totalCount;
+        return currentMenu.stream().filter(x -> x.getNameDish().equalsIgnoreCase(dishName)).
+                collect(Collectors.summingInt(p -> p.getCount()));
+
     }
 
     @Override

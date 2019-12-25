@@ -1,9 +1,9 @@
-package accounting;
+package pizza.accounting;
 
-import common.Identifier;
-import menu.CookedDish;
-import menu.Menu;
-import order.Order;
+import pizza.common.Identifier;
+import pizza.menu.CookedDish;
+import pizza.menu.Menu;
+import pizza.order.Order;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package menu;
+package pizza.menu;
 
 import java.util.List;
 

@@ -1,4 +1,5 @@
-import common.Money;
+
+import pizza.common.Money;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

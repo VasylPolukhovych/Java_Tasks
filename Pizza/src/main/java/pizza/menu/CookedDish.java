@@ -1,4 +1,4 @@
-package menu;
+package pizza.menu;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -16,6 +16,10 @@ public class CookedDish extends Dish {
 
     public int getCount() {
         return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public LocalDate getDateOfMaking() {

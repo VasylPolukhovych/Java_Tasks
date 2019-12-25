@@ -1,4 +1,4 @@
-package input;
+package pizza.input;
 
 import java.util.Map;
 
