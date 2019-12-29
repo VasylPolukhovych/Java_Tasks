@@ -8,6 +8,7 @@ import pizza.order.Order;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Reports {
 
@@ -27,7 +28,7 @@ public class Reports {
         currentMenu.getCurrentMenu().stream()
                 .filter(x -> !x.isDishSpoiled(LocalDate.now()))
                 .map(x -> "Dish - " + x.getNameDish() + ". " +
-                        "Count - " + x.getCount() + ". " +
+                        "Count - " + x.getCurrentCount() + ". " +
                         "Price - " + x.getPrice().getCount() + ".").forEach(System.out::println);
         System.out.println("*****************************************");
     }
@@ -47,7 +48,7 @@ public class Reports {
                     .stream().map(i -> "Dish - " + i.getValue().getDish().getNameDish() +
                     " Count - " + i.getValue().getCount() +
                     " Price " + i.getValue().getDish().getPrice().getCount())
-                    .forEach(System.out::printf);
+                    .forEach(System.out::println);
             System.out.println("");
             System.out.println("________________________________________________");
             System.out.printf("Summa = %8.2f Tip = %d Total = %8.2f", summa, tip, (summa + summa * tip / 100));
@@ -57,6 +58,22 @@ public class Reports {
         }
     }
 
+    public void salesRegister(List<CookedDish> dishes) {
+        System.out.println("*****************************************");
+        System.out.println("Sales Register");
+        System.out.println("Summa - " +
+                dishes.stream()
+                        .filter( x -> x.getCurrentCount() != x.getCount())
+                        .peek( x -> System.out.println(
+                                "Dish - " + x.getNameDish() + ". " +
+                                "Count - " + (x.getCount() - x.getCurrentCount()) + ". " +
+                                "Price - " + x.getPrice().getCount() + "."))
+                        .collect(Collectors.summingDouble(
+                                x -> (x.getCount() - x.getCurrentCount()) * x.getDishDetails().getPrice().getCount())
+                        )
+        );
+        System.out.println("*****************************************");
+    }
 
     public void printMesage(List<String> strings) {
         StringBuilder stringBuilder = new StringBuilder();

@@ -1,5 +1,6 @@
 package pizza.menu;
 
+import pizza.accounting.Accounting;
 import pizza.common.Money;
 
 import java.time.Duration;
@@ -34,26 +35,28 @@ public class CurrentMenu implements Menu {
 
     @Override
     public void changeCount(String nameDish, int count) {
-        try {
-            int newCount;
-            newCount = currentMenu.stream()
-                    .filter(x -> nameDish.equalsIgnoreCase(x.getNameDish()))
-                    .collect(Collectors.summingInt(((p) -> p.getCount()))) - count;
-            CookedDish tempCookedDish = currentMenu.stream()
-                            .filter(x -> nameDish.equalsIgnoreCase(x.getNameDish()))
-                            .findAny().orElseThrow(() -> new Exception(nameDish + " not found in menu"));
-            currentMenu = currentMenu.stream()
-                    .filter(x -> !nameDish.equalsIgnoreCase(x.getNameDish()))
-                    .collect(Collectors.toList());
-            if (newCount > 0) {
-                tempCookedDish.setCount(newCount);
-                currentMenu.add(tempCookedDish);
+
+        while (count > 0) {
+            Optional<CookedDish> foundFirstDish = currentMenu.stream()
+                    .filter(x -> nameDish.equalsIgnoreCase(x.getNameDish())
+                            && x.getCurrentCount() > 0
+                            && !(x.isDishSpoiled(LocalDate.now())))
+                    .findFirst();
+
+            if (foundFirstDish.isPresent()) {
+                if (foundFirstDish.get().getCurrentCount() - count >= 0) {
+                    foundFirstDish.get().setCurrentCount(foundFirstDish.get().getCurrentCount() - count);
+                    count = 0;
+
+                } else {
+                    count = count - foundFirstDish.get().getCurrentCount();
+                    foundFirstDish.get().setCurrentCount(0);
+                }
+            } else {
+                count = 0;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-
+        currentMenu.removeAll(currentMenu.stream().filter(x -> x.getCurrentCount() == 0).collect(Collectors.toList()));
     }
 
     @Override
@@ -65,13 +68,13 @@ public class CurrentMenu implements Menu {
     public CookedDish findCookedDishInMenuByName(String nameDish) {
 
         return currentMenu.stream().filter(x -> x.getNameDish().equalsIgnoreCase(nameDish)
-                && x.getCount() > 0 && (!x.isDishSpoiled(LocalDate.now()))).findFirst().orElse(null);
+                && x.getCurrentCount() > 0 && (!x.isDishSpoiled(LocalDate.now()))).findFirst().orElse(null);
 
     }
 
     @Override
     public void addDishs(int countOfDishs) {
-        for (int j = 0; j < 3; j++) {
+        for (int j = 0; j < 5; j++) {
             dishs.add(createRandomDish(j));
         }
     }
@@ -89,7 +92,7 @@ public class CurrentMenu implements Menu {
     @Override
     public int availableCount(String dishName) {
         return currentMenu.stream().filter(x -> x.getNameDish().equalsIgnoreCase(dishName)).
-                collect(Collectors.summingInt(p -> p.getCount()));
+                collect(Collectors.summingInt(p -> p.getCurrentCount()));
 
     }
 
@@ -98,5 +101,13 @@ public class CurrentMenu implements Menu {
         currentMenu.removeAll(cookedDishesToRemoveFromMenu);
 
     }
+
+    @Override
+    public void addCookedDishToMenu(CookedDish cookedDish) {
+        currentMenu.add(cookedDish);
+
+    }
+
+    ;
 
 }

@@ -21,5 +21,7 @@ public interface Accounting {
     void disposeOfOverdueDishes(Menu menu);
 
     void fillAllCookedDishsByMenu(Menu menu);
+
+    void addCookedDish(CookedDish cookedDish);
 }
 

@@ -57,4 +57,8 @@ public class BasicAccounting implements Accounting {
         allCookedDishes.addAll(menu.getCurrentMenu());
     }
 
+    @Override
+    public void addCookedDish(CookedDish cookedDish) {
+        allCookedDishes.add(cookedDish);
+    }
 }

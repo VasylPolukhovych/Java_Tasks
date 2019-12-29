@@ -13,6 +13,7 @@ public interface Menu {
     void changeCount(String nameDish, int count);
 
     void addDishs(int countOfDishs);
+    void addCookedDishToMenu (CookedDish cookedDish);
 
     void cookDishs(int countOfDishs);
 

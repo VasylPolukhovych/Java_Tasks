@@ -5,21 +5,27 @@ import java.util.Objects;
 
 public class CookedDish extends Dish {
     private int count;
+    private int currentCount;
     private LocalDate dateOfMaking;
 
 
     public CookedDish(Dish dish, int count, LocalDate dateOfMaking) {
         super(dish.getNameDish(), dish.getCostOfCosts(), dish.getPrice(), dish.getShelfLife());
         this.count = count;
+        this.currentCount =count;
         this.dateOfMaking = dateOfMaking;
+    }
+
+    public int getCurrentCount() {
+        return currentCount;
+    }
+
+    public void setCurrentCount(int currentCount) {
+        this.currentCount = currentCount;
     }
 
     public int getCount() {
         return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     public LocalDate getDateOfMaking() {
@@ -38,12 +44,12 @@ public class CookedDish extends Dish {
         return true;
     }
 
-    public boolean canDishBeSold(String nameDish, CookedDish cookedDish) {
+    /*public boolean canDishBeSold(String nameDish, CookedDish cookedDish) {
         boolean result = cookedDish.getNameDish().equalsIgnoreCase(nameDish);
         result = result && cookedDish.getCount() > 0;
         result = result && (!isDishSpoiled(LocalDate.now()));
         return result;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {
