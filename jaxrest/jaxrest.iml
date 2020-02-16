@@ -38,5 +38,6 @@
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 5.0.1 - EJB" level="application_server_libraries" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 5.0.1 - Connector Architecture (JSR 322)" level="application_server_libraries" />
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 5.0.1 - WebSocket" level="application_server_libraries" />
+    <orderEntry type="library" name="JAX-RS-2.0" level="project" />
   </component>
 </module>
