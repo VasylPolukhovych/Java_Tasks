@@ -9,7 +9,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <dropwizard.version>1.3.5</dropwizard.version>
+        <dropwizard.version>1.3.9</dropwizard.version>
+        <postgres-jdbc.version>42.2.5</postgres-jdbc.version>
     </properties>
 
     <dependencies>
@@ -17,6 +18,17 @@
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
             <version>${dropwizard.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-jdbi</artifactId>
+            <version>${dropwizard.version}</version>
+
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.12</version>
         </dependency>
     </dependencies>
 
