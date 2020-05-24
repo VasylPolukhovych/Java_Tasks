@@ -3,46 +3,79 @@ package demo.resurces;
 import com.google.common.base.Optional;
 import demo.api.Pizza;
 import com.codahale.metrics.annotation.Timed;
-import demo.services.PizzaService;
+import demo.dao.IPizzaDAO;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("/v1/pizza")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes({MediaType.APPLICATION_JSON})
 public class PizzaResurces {
 
-    private final String message;
-    private final String user;
+    IPizzaDAO pizzaDAO;
 
-    public PizzaResurces(String message, String user) {
-        this.message = message;
-        this.user = user;
+    public PizzaResurces(IPizzaDAO pizzaDAO) {
+        this.pizzaDAO = pizzaDAO;
+    }
+
+    @GET
+    @Path("/getall")
+    @Timed
+    public List<Pizza> getAll() {
+        return pizzaDAO.getAll();
+    }
+
+    @GET
+    @Path("/{id}")
+    public Pizza get(@PathParam("id") Integer id) {
+        return pizzaDAO.findById(id);
     }
 
     @GET
     @Timed
-    public Pizza getPizza(@QueryParam("name") Optional<String> name
-            , @QueryParam("user") Optional<String> httpUser) {
-        final String value = String.format(message, httpUser.or(user), name.or("Pizza"));
-        Pizza pizza = PizzaService.getPizza(name.or("Pizza"));
+    public Pizza get(@QueryParam("name") Optional<String> name) {
+        final String value = String.format(name.or("Pizza"));
+        Pizza pizza = pizzaDAO.findByName(name.or("Pizza"));
 
         if (pizza == null) {
-            return new Pizza(value, 0.0, 0);
+            return new Pizza(value, 0.0, 0, 0);
         }
 
         return pizza;
+
     }
+
+
+    @PUT
+    @Timed
+    public Pizza update(@QueryParam("count") Integer count, @QueryParam("id") Integer id) {
+
+        Pizza updatePizza = new Pizza("PizzaUpd",
+                0.00, count, id);
+        pizzaDAO.update(updatePizza);
+
+        return pizzaDAO.findById(id);
+    }
+
+    @DELETE
+    @Path("/del/{id}")
+    public void delete(@PathParam("id") Integer id) {
+        pizzaDAO.deleteById(id);
+    }
+
 
     @POST
     @Timed
     @Path("/add")
     public Response addPizza(@QueryParam("name") String name,
                              @QueryParam("price") String price,
-                             @QueryParam("count") String count) {
+                             @QueryParam("count") String count,
+                             @QueryParam("id") String id) {
 
-        if (PizzaService.getPizza(name) != null)
+        if (pizzaDAO.findByName(name) != null)
             return Response.status(Response.Status.BAD_REQUEST).
                     entity("Pizza " + name +
                             " already exists").type("text/plain").build();
@@ -59,10 +92,20 @@ public class PizzaResurces {
         } catch (NumberFormatException e) {
             countToUse = 0;
         }
-        PizzaService.addPizza(new Pizza(name, priceToUse,
-                countToUse));
+        int idToUse;
+        try {
+            idToUse = new Integer(count);
+            if (pizzaDAO.findById(idToUse) != null)
+                return Response.status(Response.Status.BAD_REQUEST).
+                        entity("Pizza with id = " + id +
+                                " already exists").type("text/plain").build();
+        } catch (NumberFormatException e) {
+            idToUse = 0;
+        }
+        pizzaDAO.insert(new Pizza(name, priceToUse,
+                countToUse, idToUse));
 
         return Response.status(Response.Status.OK).
-                entity(PizzaService.getPizza(name)).type("application/json").build();
+                entity(pizzaDAO.findByName(name)).type("application/json").build();
     }
 }

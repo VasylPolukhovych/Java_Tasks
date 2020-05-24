@@ -1,32 +1,26 @@
 package demo;
 
-import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 public class PizzaConfiguration extends Configuration {
-    @NotEmpty
-    private String message;
+    private static final String DATABASE = "database";
+    @Valid
+    @NotNull
+    private DataSourceFactory dataSourceFactory = new DataSourceFactory();
 
-    @NotEmpty
-    private String user;
-
-    @JsonProperty
-    public String getMessage() {
-        return message;
+    @JsonProperty(DATABASE)
+    public DataSourceFactory getDataSourceFactory() {
+        return dataSourceFactory;
     }
 
-    @JsonProperty
-    public void setMessage(String message) {
-        this.message = message;
+    @JsonProperty(DATABASE)
+    public void setDataSourceFactory(final DataSourceFactory dataSourceFactory) {
+        this.dataSourceFactory = dataSourceFactory;
     }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
 }

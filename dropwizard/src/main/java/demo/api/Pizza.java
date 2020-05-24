@@ -6,16 +6,23 @@ import org.hibernate.validator.constraints.Length;
 public class Pizza {
     @Length(min = 3, max = 6)
     private String name;
-    private Double price;
-    private Integer count;
+    private double price;
+    private int count;
+    private int id;
 
     public Pizza() {
     }
 
-    public Pizza(String name, Double price, int count) {
+    public Pizza(String name, double price, int count, int id) {
         this.name = name;
         this.price = price;
         this.count = count;
+        this.id = id;
+    }
+
+    @JsonProperty
+    public int getId() {
+        return id;
     }
 
     @JsonProperty
@@ -24,13 +31,25 @@ public class Pizza {
     }
 
     @JsonProperty
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
     @JsonProperty
-    public Integer getCount() {
+    public int getCount() {
         return count;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pizza)) return false;
+
+        Pizza that = (Pizza) o;
+
+        if (getId() != that.getId()) return false;
+        if (!getName().equals(that.getName())) return false;
+
+        return true;
+    }
 }
