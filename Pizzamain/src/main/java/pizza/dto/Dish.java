@@ -1,7 +1,6 @@
-package pizza.menu;
+package pizza.dto;
 
-import pizza.common.Money;
-
+import pizza.dto.common.Money;
 import java.time.Duration;
 import java.util.Objects;
 

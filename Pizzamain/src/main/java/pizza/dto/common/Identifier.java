@@ -1,4 +1,4 @@
-package pizza.common;
+package pizza.dto.common;
 
 import java.util.Objects;
 

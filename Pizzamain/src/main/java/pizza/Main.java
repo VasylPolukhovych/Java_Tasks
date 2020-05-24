@@ -1,55 +1,39 @@
 package pizza;
-import pizza.accounting.BasicAccounting;
-import pizza.common.Identifier;
-import pizza.common.Money;
-import pizza.exception.OrderNotfoundException;
+
+import pizza.dao.CurrentMenuDAO;
+import pizza.dao.CurrentMenuDAOI;
+import pizza.dto.CookedDish;
 import pizza.input.InputData;
 import pizza.input.InputDataOfOrder;
-import pizza.menu.CookedDish;
-import pizza.menu.CurrentMenu;
-import pizza.menu.Dish;
-import pizza.menu.Menu;
-import pizza.order.ActionsWithClient;
-import pizza.order.MainActionsWithClient;
 import pizza.output.Reports;
+import pizza.service.ServeClient;
 
-import java.time.Duration;
-import java.time.LocalDate;
-
-import static java.awt.SystemColor.menu;
+import java.sql.Connection;
+import java.util.List;
 
 public class Main {
 
+    private static MyConnection myConn = new MyConnection("org.postgresql.Driver",
+            "jdbc:postgresql://localhost:5432/Testdb",
+            "postgres",
+            "admin");
 
-    private static BasicAccounting accounting = new BasicAccounting();
-    private static Menu menu = new CurrentMenu();
-    private static ActionsWithClient actionsWithClient = new MainActionsWithClient();
     private static Reports reports = new Reports();
     private static InputData inputData = new InputDataOfOrder();
+    private static CurrentMenuDAOI currentMenu;
 
+    public static void main(String[] args) throws Exception {
+        Connection conn = myConn.getConnection();
+        currentMenu = new CurrentMenuDAO(conn);
+        List<CookedDish> menu = currentMenu.getCurrentMenu();
+        reports.printMenu(menu);
+        ServeClient serveClient = new ServeClient(inputData, menu, conn);
+        serveClient.getNewOrder();
 
-    public static void main(String[] args)  {
-        menu.addDishs(7);
-        menu.cookDishs(6);
-        reports.printMenu(menu);
-        accounting.fillAllCookedDishsByMenu(menu);
-        actionsWithClient.serveClient(menu, inputData, accounting);
-        reports.printMenu(menu);
-        CookedDish newCookedDish = new CookedDish(
-                new Dish("New Pizza",new Money( 57 ), new Money(85),Duration.ofDays(30))
-                ,7
-                , LocalDate.now()
-        );
-        accounting.addCookedDish(newCookedDish);
-        menu.addCookedDishToMenu(newCookedDish);
+        reports.printDishs(currentMenu.getDishes(), "All cooked dishes");
+        reports.printDishs(currentMenu.getDishes(), "All spoiled dishes");
 
-        reports.printMenu(menu);
-        reports.printDishs(accounting.getAllCookedDishes(), "All cooked dishes");
-        accounting.disposeOfOverdueDishes(menu);
-        reports.printDishs(accounting.getSpoiledDishes(), "All spoiled dishes");
-        reports.printOrder(new Identifier(),accounting);
-        reports.salesRegister(accounting.getAllCookedDishes());
+        conn.close();
     }
-
 
 }
