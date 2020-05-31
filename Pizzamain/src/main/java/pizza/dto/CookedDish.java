@@ -46,13 +46,6 @@ public class CookedDish extends Dish {
         return true;
     }
 
-    /*public boolean canDishBeSold(String nameDish, CookedDish cookedDish) {
-        boolean result = cookedDish.getNameDish().equalsIgnoreCase(nameDish);
-        result = result && cookedDish.getCount() > 0;
-        result = result && (!isDishSpoiled(LocalDate.now()));
-        return result;
-    }*/
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -80,7 +80,7 @@ public class ServeClient {
     }
 
     public void changeCount(String nameDish, int count) throws Exception {
-        CurrentMenuDAOI curMenu = new CurrentMenuDAO(conn);
+        CurrentMenuDAO curMenu = new CurrentMenuDAO(conn);
         List<CookedDish> someDishInMenu = curMenu.getCookedDishesByName(nameDish);
         for (CookedDish cDish : someDishInMenu
                 ) {
@@ -113,7 +113,7 @@ public class ServeClient {
 
     public void getNewOrder() throws Exception {
         Reports report = new Reports();
-        OrderDAOI orderDAO = new OrderDAO(conn);
+        OrderDAO orderDAO = new OrderDAO(conn);
         order = fillOrder(inputData.inputInt("Would you like to leave a tip?"));
         if (order != null) {
             int orderId = orderDAO.addOrder(order);

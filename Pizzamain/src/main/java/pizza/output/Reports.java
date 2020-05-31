@@ -2,6 +2,8 @@ package pizza.output;
 
 import pizza.dto.CookedDish;
 import pizza.dto.Order;
+import pizza.exception.OrderNotfoundException;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -40,11 +42,9 @@ public class Reports {
     }
 
     public void printOrder(int orderId, Order order) {
-        try {
-
-            if (order == null) {
-                new Exception("Bill #" + orderId + " does not exist on the system");
-            }
+        if (order == null) {
+            new OrderNotfoundException(orderId);
+        } else {
             double summa = order.getSelectedDishes().stream().mapToDouble(i -> i.getCount() * i.getDish().getPrice().getCount()).sum();
 
 
@@ -58,35 +58,8 @@ public class Reports {
             System.out.println("________________________________________________");
             System.out.printf("Summa = %8.2f Tip = %d Total = %8.2f", summa, order.getTip(), (summa + summa * order.getTip() / 100));
             System.out.println("");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
-
-/*    public void salesRegister(List<CookedDish> dishes) {
-        System.out.println("*****************************************");
-        System.out.println("Sales Register");
-        System.out.println("Summa - " +
-                dishes.stream()
-                        .filter( x -> x.getCurrentCount() != x.getCount())
-                        .peek( x -> System.out.println(
-                                "Dish - " + x.getNameDish() + ". " +
-                                "Count - " + (x.getCount() - x.getCurrentCount()) + ". " +
-                                "Price - " + x.getPrice().getCount() + "."))
-                        .collect(Collectors.summingDouble(
-                                x -> (x.getCount() - x.getCurrentCount()) * x.getDishDetails().getPrice().getCount())
-                        )
-        );
-        System.out.println("*****************************************");
-    }
-
-    public void printMesage(List<String> strings) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String item : strings) {
-            stringBuilder.append(item);
-        }
-        String result = stringBuilder.toString();
-        System.out.println(result);
-    }
-*/
 }
+
+

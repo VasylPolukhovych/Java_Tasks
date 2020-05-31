@@ -9,9 +9,9 @@ public class InputDataOfOrder implements InputData {
     private Scanner scanner = new Scanner(System.in);
 
     @Override
-    public boolean isInputEnd() {
+    public boolean isInputEnd(String question) {
         System.out.println("--------------------------------------------------------------");
-        System.out.println("The order has already been formed?");
+        System.out.println(question);
         if (scanner.nextLine().equalsIgnoreCase("yes")) {
             return true;
         }
@@ -34,7 +34,7 @@ public class InputDataOfOrder implements InputData {
             System.out.println("How many servings do you want to get?");
             Long count = Long.parseLong(scanner.nextLine());
             map.put(nameD, count);
-            endOfOrder = isInputEnd();
+            endOfOrder = isInputEnd("Is order completed ?");
         }
         return map;
     }
