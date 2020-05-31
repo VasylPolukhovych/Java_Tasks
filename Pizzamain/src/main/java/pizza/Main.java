@@ -1,6 +1,5 @@
 package pizza;
 
-import org.postgresql.ds.PGPoolingDataSource;
 import org.postgresql.ds.PGSimpleDataSource;
 import pizza.dao.CurrentMenuDAO;
 import pizza.dto.CookedDish;
@@ -12,7 +11,6 @@ import pizza.service.ServeClient;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
     private static Reports reports = new Reports();
