@@ -18,7 +18,6 @@ public class Main {
     private static Reports reports = new Reports();
     private static InputData inputData = new InputDataOfOrder();
     private static CurrentMenuDAO currentMenu;
-    private Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) throws Exception {
 
