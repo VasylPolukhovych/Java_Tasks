@@ -1,0 +1,23 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="dataSource" class="org.postgresql.ds.PGSimpleDataSource">
+        <property name="serverNames">
+        <list>
+            <value>localhost</value>
+                   </list>
+        </property>
+
+        <property name="databaseName" value="Testdb"/>
+        <property name="user" value="postgres"/>
+        <property name="password" value="admin"/>
+    </bean>
+
+    <bean id="reports" class="pizza.output.Reports" />
+    <bean id="input" class="pizza.input.InputDataOfOrder"/>
+    <bean id="serveClient" class="pizza.service.ServeClient" scope="prototype"/>
+
+
+</beans>
