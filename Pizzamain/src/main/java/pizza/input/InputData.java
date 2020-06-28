@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface InputData {
 
-    boolean isInputEnd();
+    boolean isInputEnd(String question);
 
     Integer inputInt(String message);
 
