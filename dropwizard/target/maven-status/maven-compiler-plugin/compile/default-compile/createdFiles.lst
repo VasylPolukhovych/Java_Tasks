@@ -1,0 +1,6 @@
+demo\dao\IPizzaDAO.class
+demo\PizzaConfiguration.class
+demo\api\Pizza.class
+demo\PizzaApplication.class
+demo\api\PizzaMapper.class
+demo\resurces\PizzaResurces.class
