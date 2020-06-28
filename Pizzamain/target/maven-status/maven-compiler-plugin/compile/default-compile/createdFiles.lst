@@ -5,15 +5,11 @@ pizza\dao\DishDAO.class
 pizza\service\ServeClient.class
 pizza\dto\common\Identifier.class
 pizza\dto\Order.class
-pizza\dao\CurrentMenuDAOI.class
 pizza\input\InputData.class
 pizza\dto\common\Money.class
 pizza\dto\CookedDish.class
 pizza\Main.class
 pizza\output\Reports.class
-pizza\MyConnection.class
-pizza\dao\DishDAOI.class
-pizza\dao\OrderDAOI.class
 pizza\exception\OrderNotfoundException.class
 pizza\input\InputDataOfOrder.class
 pizza\dto\Dish.class

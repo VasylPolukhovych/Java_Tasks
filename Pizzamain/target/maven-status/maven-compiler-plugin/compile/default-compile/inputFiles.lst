@@ -2,12 +2,8 @@ D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\dto\CookedDish.java
 D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\dto\Dish.java
 D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\exception\OrderNotfoundException.java
 D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\dao\CurrentMenuDAO.java
-D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\dao\OrderDAOI.java
-D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\dao\DishDAOI.java
 D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\dao\OrderDAO.java
-D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\MyConnection.java
 D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\output\Reports.java
-D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\dao\CurrentMenuDAOI.java
 D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\input\InputDataOfOrder.java
 D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\dto\common\Money.java
 D:\JAVA\Java_Tasks\Pizzamain\src\main\java\pizza\dto\Order.java
