@@ -1,5 +1,7 @@
 package pizza.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import pizza.dto.DishInOrder;
 import pizza.dto.Order;
 
@@ -9,11 +11,12 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.List;
 
+@Component
 public class OrderDAO {
+    @Autowired
     private Connection conn;
 
-    public OrderDAO(Connection conn) {
-        this.conn = conn;
+    public OrderDAO() {
     }
 
     public int addOrder(Order order) throws Exception {

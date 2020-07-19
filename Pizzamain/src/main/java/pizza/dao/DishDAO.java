@@ -1,5 +1,7 @@
 package pizza.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import pizza.dto.Dish;
 import pizza.dto.DishInOrder;
 import pizza.dto.common.Money;
@@ -11,11 +13,12 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class DishDAO {
+    @Autowired
     private Connection conn;
 
-    public DishDAO(Connection conn) {
-        this.conn = conn;
+    public DishDAO() {
     }
 
     public List<DishInOrder> getDishesInOrder(int idOrder) throws Exception {

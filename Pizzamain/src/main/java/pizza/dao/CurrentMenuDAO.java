@@ -1,5 +1,7 @@
 package pizza.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import pizza.dto.CookedDish;
 import pizza.dto.Dish;
 import pizza.dto.common.Money;
@@ -11,12 +13,15 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
-
+@Component
 public class CurrentMenuDAO {
+    @Autowired
     private Connection conn;
 
-    public CurrentMenuDAO(Connection conn) {
-        this.conn = conn;
+
+
+    public CurrentMenuDAO() {
+
     }
 
     public List<CookedDish> getCookedDishes(ResultSet resultSet) throws SQLException {
