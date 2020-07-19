@@ -1,49 +1,32 @@
 package pizza.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import pizza.dto.Dish;
 import pizza.dto.DishInOrder;
-import pizza.dto.common.Money;
+import pizza.dto.mappers.DishInOrderMapper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
+import javax.sql.DataSource;
 
 @Component
 public class DishDAO {
-    @Autowired
-    private Connection conn;
+    JdbcTemplate jdbcTemplate;
 
-    public DishDAO() {
+    private final String SQL_DISHES_IN__ORDER = "SELECT d.name, d.cost_of_cost, d.price, d.shelf_life,dor.count" +
+            "FROM public.dish d" +
+            "join public.dish_in_oreder dor" +
+            "on d.name=dor.name_dish" +
+            "where dor.id_oreder =?";
+
+    @Autowired
+    public DishDAO(DataSource dataSource) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
+
     }
 
-    public List<DishInOrder> getDishesInOrder(int idOrder) throws Exception {
-        DishInOrder dishInOrder;
-        List<DishInOrder> dishesInOrder = new ArrayList();
-        Dish dish;
-        try (PreparedStatement stDishInOrder = conn.prepareStatement(
-                "SELECT d.name, d.cost_of_cost, d.price, d.shelf_life,dor.count" +
-                        "FROM public.dish d" +
-                        "join public.dish_in_oreder dor" +
-                        "on d.name=dor.name_dish" +
-                        "where dor.id_oreder =?");) {
-            stDishInOrder.setInt(1, idOrder);
+    public DishInOrder getDishesInOrder(int idOrder) throws Exception {
 
-            try (ResultSet rsDishInOrder = stDishInOrder.executeQuery();) {
-                while (rsDishInOrder.next()) {
-                    dish = new Dish(rsDishInOrder.getString("NAME"),
-                            new Money(rsDishInOrder.getDouble("COST_OF_COST")),
-                            new Money(rsDishInOrder.getDouble("PRICE")),
-                            Duration.ofDays(rsDishInOrder.getInt("SHELF_LIFE")));
-                    dishInOrder = new DishInOrder(rsDishInOrder.getInt("COUNT"), dish);
-                    dishesInOrder.add(dishInOrder);
-                }
-                return dishesInOrder;
-            }
-        }
+        return jdbcTemplate.queryForObject(SQL_DISHES_IN__ORDER, new Object[]{idOrder}, new DishInOrderMapper());
+
     }
 }

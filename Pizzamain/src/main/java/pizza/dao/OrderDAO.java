@@ -1,74 +1,56 @@
 package pizza.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import pizza.dto.DishInOrder;
 import pizza.dto.Order;
+import pizza.dto.mappers.OrderMapper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.time.LocalDate;
+import javax.sql.DataSource;
 import java.util.List;
 
 @Component
 public class OrderDAO {
-    @Autowired
-    private Connection conn;
+    JdbcTemplate jdbcTemplate;
 
-    public OrderDAO() {
+    private final String SQL_GET_ORDER = "SELECT o.id, extract(day from o.date) dd,extract(month from o.date) mm," +
+            " extract(year from o.date) yy, o.tip" +
+            " FROM public.order o where o.id =?";
+    private final String SQL_GET_COUNT = "SELECT cd.current_count FROM public.cooked_dish cd " +
+            " WHERE cd.id =?";
+    private final String SQL_ADD_ORDER = "INSERT INTO public.order(" +
+            "date, tip)" +
+            "VALUES (?, ?)";
+    private final String SQL_MAX_ID = "SELECT max(id) as MAX_ID from public.order";
+    private final String SQL_ADD_DISH_TO_ORDER = "INSERT INTO public.dish_in_oreder(" +
+            "name_dish, id_oreder, count)" +
+            "VALUES ( ?, ?, ?);";
+
+
+    @Autowired
+    public OrderDAO(DataSource dataSource) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     public int addOrder(Order order) throws Exception {
-        try (PreparedStatement st = conn.prepareStatement(
-                "INSERT INTO public.order(" +
-                        "date, tip)" +
-                        "VALUES (?, ?);");) {
-            st.setDate(1, java.sql.Date.valueOf(order.getDate()));
-            st.setInt(2, order.getTip());
-            st.executeUpdate();
-        }
+        jdbcTemplate.update(SQL_ADD_ORDER, java.sql.Date.valueOf(order.getDate()), order.getTip());
 
-        int orderId = 0;
-        try (PreparedStatement st = conn.prepareStatement(
-                "SELECT max(id) as MAX_ID from public.order");
-             ResultSet rs = st.executeQuery();) {
-            rs.next();
-            orderId = rs.getInt("MAX_ID");
-        }
+        int orderId =  (Integer) jdbcTemplate.queryForObject(SQL_MAX_ID, new Object[] {}, Integer.class);
 
         for (DishInOrder dishInOrder : order.getSelectedDishes()
                 ) {
-            try (PreparedStatement st = conn.prepareStatement(
-                    "INSERT INTO public.dish_in_oreder(" +
-                            "name_dish, id_oreder, count)" +
-                            "VALUES ( ?, ?, ?);");) {
-                st.setString(1, dishInOrder.getDish().getNameDish());
-                st.setInt(2, orderId);
-                st.setInt(3, dishInOrder.getCount());
-                st.executeUpdate();
-            }
+            jdbcTemplate.update(SQL_ADD_DISH_TO_ORDER, dishInOrder.getDish().getNameDish(),
+                    orderId,dishInOrder.getCount());
+
         }
         return orderId;
     }
 
 
     public Order getOrder(int id, List<DishInOrder> dishInOrder) throws Exception {
-        Order order;
-        PreparedStatement stOrder = conn.prepareStatement(
-                "SELECT o.id, extract(day from o.date) dd,extract(month from o.date) mm," +
-                        " extract(year from o.date) yy, o.tip" +
-                        " FROM public.order o where o.id =?");
-        stOrder.setInt(1, id);
-        ResultSet rsOrder = stOrder.executeQuery();
+        return jdbcTemplate.queryForObject(SQL_GET_ORDER, new Object[]{id}, new OrderMapper(dishInOrder));
 
-        order = new Order(dishInOrder,
-                LocalDate.of(rsOrder.getInt("YY"), rsOrder.getInt("MM"), rsOrder.getInt("DD")),
-                rsOrder.getInt("TIP")
-        );
-        rsOrder.close();
-        stOrder.close();
-        return order;
     }
 
 }
