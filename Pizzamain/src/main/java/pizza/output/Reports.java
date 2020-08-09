@@ -1,5 +1,6 @@
 package pizza.output;
 
+import pizza.annotation.CheckUserAnnotation;
 import pizza.dto.CookedDish;
 import pizza.dto.Order;
 import pizza.exception.OrderNotfoundException;
@@ -8,8 +9,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Reports {
-
-    public void printDishs(List<CookedDish> dishes, String reportName) {
+    @CheckUserAnnotation
+    public void printDishs(String user, String userDB, List<CookedDish> dishes, String reportName) {
         System.out.println("*****************************************");
         System.out.println(reportName);
         if (reportName.equals("All spoiled dishes")) {

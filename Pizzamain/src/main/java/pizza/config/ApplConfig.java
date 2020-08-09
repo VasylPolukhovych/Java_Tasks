@@ -1,10 +1,8 @@
 package pizza.config;
 
 import org.postgresql.ds.PGSimpleDataSource;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
+import pizza.aspect.Logging;
 import pizza.dao.CurrentMenuDAO;
 import pizza.dao.OrderDAO;
 import pizza.input.InputData;
@@ -14,6 +12,7 @@ import pizza.service.ServeClient;
 
 @Configuration
 @ComponentScan(basePackages = "pizza.dao")
+@EnableAspectJAutoProxy
 public class ApplConfig {
 
     @Bean(name = "dataSource")
@@ -43,4 +42,10 @@ public class ApplConfig {
             , CurrentMenuDAO currentMenuDAO) throws Exception {
         return new ServeClient(input, report, orderDAO, currentMenuDAO);
     }
+
+    @Bean(name = "logging")
+    public Logging getLogging() {
+        return new Logging();
+    }
+
 }

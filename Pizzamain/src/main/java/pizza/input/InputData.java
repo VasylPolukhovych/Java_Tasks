@@ -8,5 +8,7 @@ public interface InputData {
 
     Integer inputInt(String message);
 
+    String inputString(String message);
+
     Map<String, Long> inputDetails();
 }
