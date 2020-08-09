@@ -1,8 +1,5 @@
 package pizza.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import pizza.dao.*;
 import pizza.dto.CookedDish;
 import pizza.dto.DishInOrder;
@@ -10,28 +7,25 @@ import pizza.dto.Order;
 import pizza.input.InputData;
 import pizza.output.Reports;
 
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
+
 public class ServeClient {
     private InputData inputData;
     private List<CookedDish> menu;
-    private Order order;
-    @Autowired
-    private Connection conn;
-    @Autowired
-    @Qualifier(value = "menuDAO")
-    private CurrentMenuDAO curMenu;
-    @Autowired
-    private OrderDAO orderDAO;
-    @Autowired
     private Reports report;
-    public ServeClient(InputData inputData, List<CookedDish> menu) {
+    private Order order;
+    private CurrentMenuDAO menuDAO;
+    private OrderDAO orderDAO;
+
+    public ServeClient(InputData inputData, Reports report, OrderDAO orderDAO, CurrentMenuDAO menuDAO) throws Exception {
         this.inputData = inputData;
-        this.menu = menu;
+        this.report = report;
+        this.orderDAO = orderDAO;
+        this.menuDAO = menuDAO;
+        this.menu = menuDAO.getCurrentMenu();
     }
 
 
@@ -84,14 +78,14 @@ public class ServeClient {
     }
 
     public void changeCount(String nameDish, int count) throws Exception {
-        List<CookedDish> someDishInMenu = curMenu.getCookedDishesByName(nameDish);
+        List<CookedDish> someDishInMenu = menuDAO.getCookedDishesByName(nameDish);
         for (CookedDish cDish : someDishInMenu) {
             if (cDish.getCurrentCount() - count >= 0) {
-                curMenu.setCount(cDish.getId(), cDish.getCurrentCount() - count);
+                menuDAO.setCount(cDish.getId(), cDish.getCurrentCount() - count);
                 count = 0;
             } else {
                 count = count - cDish.getCurrentCount();
-                curMenu.setCount(cDish.getId(), 0);
+                menuDAO.setCount(cDish.getId(), 0);
             }
             if (count == 0) {
                 break;
@@ -117,5 +111,4 @@ public class ServeClient {
             report.printOrder(orderId, order);
         }
     }
-
 }
