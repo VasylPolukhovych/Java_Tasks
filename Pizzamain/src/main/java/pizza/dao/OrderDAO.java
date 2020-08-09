@@ -2,7 +2,7 @@ package pizza.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import pizza.dto.DishInOrder;
 import pizza.dto.Order;
 import pizza.dto.mappers.OrderMapper;
@@ -10,7 +10,7 @@ import pizza.dto.mappers.OrderMapper;
 import javax.sql.DataSource;
 import java.util.List;
 
-@Component
+@Repository
 public class OrderDAO {
     JdbcTemplate jdbcTemplate;
 
@@ -28,7 +28,6 @@ public class OrderDAO {
             "VALUES ( ?, ?, ?);";
 
 
-    @Autowired
     public OrderDAO(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }

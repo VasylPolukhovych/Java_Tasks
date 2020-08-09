@@ -2,14 +2,14 @@ package pizza.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import pizza.dto.CookedDish;
 import pizza.dto.mappers.CookedDishMapper;
 
 import javax.sql.DataSource;
 import java.util.*;
 
-@Component
+@Repository
 public class CurrentMenuDAO {
     JdbcTemplate jdbcTemplate;
 
@@ -36,7 +36,6 @@ public class CurrentMenuDAO {
             " where cd.date_of_making +d.shelf_life >current_date" +
             " and cd.current_count > 0 and d.name = ?";
 
-    @Autowired
     public CurrentMenuDAO(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
 

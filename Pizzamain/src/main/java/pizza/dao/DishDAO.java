@@ -2,13 +2,13 @@ package pizza.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import pizza.dto.DishInOrder;
 import pizza.dto.mappers.DishInOrderMapper;
 
 import javax.sql.DataSource;
 
-@Component
+@Repository
 public class DishDAO {
     JdbcTemplate jdbcTemplate;
 
@@ -18,7 +18,6 @@ public class DishDAO {
             "on d.name=dor.name_dish" +
             "where dor.id_oreder =?";
 
-    @Autowired
     public DishDAO(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
 
