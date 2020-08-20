@@ -1,6 +1,5 @@
 package pizza.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import pizza.dto.DishInOrder;
@@ -17,8 +16,6 @@ public class OrderDAO {
     private final String SQL_GET_ORDER = "SELECT o.id, extract(day from o.date) dd,extract(month from o.date) mm," +
             " extract(year from o.date) yy, o.tip" +
             " FROM public.order o where o.id =?";
-    private final String SQL_GET_COUNT = "SELECT cd.current_count FROM public.cooked_dish cd " +
-            " WHERE cd.id =?";
     private final String SQL_ADD_ORDER = "INSERT INTO public.order(" +
             "date, tip)" +
             "VALUES (?, ?)";
@@ -35,12 +32,12 @@ public class OrderDAO {
     public int addOrder(Order order) throws Exception {
         jdbcTemplate.update(SQL_ADD_ORDER, java.sql.Date.valueOf(order.getDate()), order.getTip());
 
-        int orderId =  (Integer) jdbcTemplate.queryForObject(SQL_MAX_ID, new Object[] {}, Integer.class);
+        int orderId = (Integer) jdbcTemplate.queryForObject(SQL_MAX_ID, new Object[]{}, Integer.class);
 
         for (DishInOrder dishInOrder : order.getSelectedDishes()
                 ) {
             jdbcTemplate.update(SQL_ADD_DISH_TO_ORDER, dishInOrder.getDish().getNameDish(),
-                    orderId,dishInOrder.getCount());
+                    orderId, dishInOrder.getCount());
 
         }
         return orderId;

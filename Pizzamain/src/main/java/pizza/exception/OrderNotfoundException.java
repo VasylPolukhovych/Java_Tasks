@@ -1,7 +1,7 @@
 package pizza.exception;
 
 public class OrderNotfoundException extends Exception {
-private int orderId;
+    private int orderId;
 
     public OrderNotfoundException(int orderId) {
 

@@ -1,16 +1,23 @@
 package pizza.output;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pizza.annotation.CheckUserAnnotation;
+import pizza.dao.CurrentMenuDAO;
 import pizza.dto.CookedDish;
 import pizza.dto.Order;
 import pizza.exception.OrderNotfoundException;
+import pizza.service.CheckUser;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class Reports {
     @CheckUserAnnotation
-    public void printDishs(String user, String userDB, List<CookedDish> dishes, String reportName) {
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
+
+    public void printDishs(CheckUser checkUser, CurrentMenuDAO menuDAO, String reportName) throws Exception {
+        List<CookedDish> dishes = menuDAO.getDishes();
         System.out.println("*****************************************");
         System.out.println(reportName);
         if (reportName.equals("All spoiled dishes")) {
@@ -31,7 +38,9 @@ public class Reports {
         }
     }
 
-    public void printMenu(List<CookedDish> currentMenu) {
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
+    public void printMenu(CurrentMenuDAO menuDAO) throws Exception {
+        List<CookedDish> currentMenu = menuDAO.getCurrentMenu();
         System.out.println("*****************************************");
         System.out.println("Menu");
         currentMenu.

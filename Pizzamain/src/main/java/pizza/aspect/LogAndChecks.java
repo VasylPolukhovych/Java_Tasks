@@ -4,34 +4,37 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
+import pizza.service.CheckUser;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Aspect
 @Component
-public class Logging {
+public class LogAndChecks {
 
     @Pointcut("execution(* pizza.dao.*.*(..))")
     public void selectAllDAOMethods() {
 
     }
 
-    @Before("selectAllDAOMethods()")
-    public void beforeAllDAOMethods(JoinPoint jp) {
+    @After("selectAllDAOMethods()")
+    public void afterAllDAOMethods(JoinPoint jp) {
         String args = Arrays.stream(jp.getArgs())
                 .map(a -> a.toString())
                 .collect(Collectors.joining(","));
-        System.out.println("Before " + jp.toString() + ", args=[" + args + "]");
+        System.out.println("After " + jp.toString() + ", args=[" + args + "]");
     }
 
-    @Pointcut("@annotation(pizza.annotation.CheckUserAnnotation) && args(user,userDB,..)")
-    public void callCheckUserAnnotation(String user, String userDB) {
+    @Pointcut("@annotation(pizza.annotation.CheckUserAnnotation) && args(checkUser,..)")
+    public void callCheckUserAnnotation(CheckUser checkUser) {
     }
 
-    @Around("callCheckUserAnnotation(user,userDB)")
-    public Object aroundCheckUserAnnotation(ProceedingJoinPoint pjp, String user, String userDB) throws Throwable {
+    @Around("callCheckUserAnnotation(checkUser)")
+    public Object aroundCheckUserAnnotation(ProceedingJoinPoint pjp, CheckUser checkUser) throws Throwable {
         Object retVal = null;
+        String user = checkUser.getCurrentUser();
+        String userDB = checkUser.getUseFromDB(user);
         if (userDB != null) {
             retVal = pjp.proceed();
         } else {
@@ -40,5 +43,4 @@ public class Logging {
         }
         return retVal;
     }
-
 }

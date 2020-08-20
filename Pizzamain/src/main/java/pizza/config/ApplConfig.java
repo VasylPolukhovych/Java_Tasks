@@ -2,17 +2,23 @@ package pizza.config;
 
 import org.postgresql.ds.PGSimpleDataSource;
 import org.springframework.context.annotation.*;
-import pizza.aspect.Logging;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import pizza.aspect.LogAndChecks;
 import pizza.dao.CurrentMenuDAO;
 import pizza.dao.OrderDAO;
+import pizza.dao.UserDAO;
 import pizza.input.InputData;
 import pizza.input.InputDataOfOrder;
 import pizza.output.Reports;
+import pizza.service.CheckUser;
 import pizza.service.ServeClient;
 
 @Configuration
 @ComponentScan(basePackages = "pizza.dao")
 @EnableAspectJAutoProxy
+@EnableTransactionManagement
 public class ApplConfig {
 
     @Bean(name = "dataSource")
@@ -23,6 +29,11 @@ public class ApplConfig {
         ds.setUser("postgres");
         ds.setPassword("admin");
         return ds;
+    }
+
+    @Bean
+    public PlatformTransactionManager txManager() {
+        return new DataSourceTransactionManager(getDataSource());
     }
 
     @Bean(name = "input")
@@ -43,9 +54,15 @@ public class ApplConfig {
         return new ServeClient(input, report, orderDAO, currentMenuDAO);
     }
 
-    @Bean(name = "logging")
-    public Logging getLogging() {
-        return new Logging();
+    @Bean(name = "checkUser")
+    public CheckUser getCheckUser(InputData input, UserDAO userDAO) {
+        return new CheckUser(input, userDAO);
+
+    }
+
+    @Bean(name = "logAndChecks")
+    public LogAndChecks getLogAndChecks() {
+        return new LogAndChecks();
     }
 
 }
