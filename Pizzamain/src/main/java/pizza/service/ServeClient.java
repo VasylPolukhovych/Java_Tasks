@@ -1,5 +1,7 @@
 package pizza.service;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pizza.dao.*;
 import pizza.dto.CookedDish;
 import pizza.dto.DishInOrder;
@@ -103,6 +105,7 @@ public class ServeClient {
         }
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void getNewOrder() throws Exception {
         order = fillOrder(inputData.inputInt("Would you like to leave a tip?"));
         if (order != null) {

@@ -25,6 +25,12 @@ public class InputDataOfOrder implements InputData {
     }
 
     @Override
+    public String inputString(String message) {
+        System.out.println(message);
+        return scanner.nextLine();
+    }
+
+    @Override
     public Map<String, Long> inputDetails() {
         boolean endOfOrder = false;
         Map<String, Long> map = new HashMap<String, Long>();

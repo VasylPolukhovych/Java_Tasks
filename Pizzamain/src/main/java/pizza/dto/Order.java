@@ -7,6 +7,7 @@ public class Order {
     private List<DishInOrder> selectedDishes;
     private LocalDate date;
     private int tip;
+
     public Order(List<DishInOrder> selectedDishes, LocalDate orderDate, int tip) {
         this.selectedDishes = selectedDishes;
         this.date = orderDate;
