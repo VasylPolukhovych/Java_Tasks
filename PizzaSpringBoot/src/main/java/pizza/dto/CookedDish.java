@@ -10,7 +10,8 @@ public class CookedDish extends Dish {
     private LocalDate dateOfMaking;
 
 
-    public CookedDish() { }
+    public CookedDish() {
+    }
 
     public CookedDish(int id, Dish dish, int count, int currentCount, LocalDate dateOfMaking) {
         super(dish.getNameDish(), dish.getCostOfCosts(), dish.getPrice(), dish.getShelfLife());

@@ -1,11 +1,17 @@
 package pizza.dto;
 
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.NotEmpty;
+
 import java.time.LocalDate;
 import java.util.List;
 
 public class Order {
+    @NotEmpty(message = "Order must contain some dish")
     private List<DishInOrder> selectedDishes;
     private LocalDate date;
+
+    @PositiveOrZero(message = "Tip must be >= 0")
     private int tip;
     private int id;
 
@@ -20,7 +26,9 @@ public class Order {
         this.selectedDishes = selectedDishes;
         this.tip = tip;
     }
-    public Order() { }
+
+    public Order() {
+    }
 
     public List<DishInOrder> getSelectedDishes() {
         return selectedDishes;
