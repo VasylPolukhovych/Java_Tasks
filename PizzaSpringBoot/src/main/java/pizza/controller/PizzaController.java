@@ -1,23 +1,30 @@
 package pizza.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import pizza.dto.CookedDish;
 import pizza.dto.CookedDishTable;
 import pizza.dto.Order;
 import pizza.service.CookedDishService;
 import pizza.service.ServeClient;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
+import java.net.URI;
 import java.util.List;
 
 @Controller
 @RequestMapping("pizza")
-
+@Validated
 public class PizzaController {
     @Autowired
     private CookedDishService cookedDishService;
@@ -34,30 +41,38 @@ public class PizzaController {
     }
 
     @PostMapping(value = "add", produces = "application/json")
-    public ResponseEntity<Void> addCookedDish(@RequestBody CookedDishTable cookedDishTable, UriComponentsBuilder builder) {
+    public ResponseEntity<Object> addCookedDish(@Valid @RequestBody CookedDishTable cookedDishTable, UriComponentsBuilder builder) {
+
         boolean flag = cookedDishService.addCookedDish(cookedDishTable);
         if (flag == false) {
-            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Object>(HttpStatus.CONFLICT);
         }
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(builder.path("/add/{id}").buildAndExpand(cookedDishTable.getId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+
+        URI url = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(cookedDishTable.getId()).toUri();
+        return ResponseEntity.created(url).build();
     }
 
     @PostMapping(value = "addOrder", produces = "application/json")
-    public ResponseEntity<Void> addOrder(@RequestBody Order order, UriComponentsBuilder builder) throws Exception {
+    public ResponseEntity<Order> addOrder(@Valid @RequestBody Order order, UriComponentsBuilder builder) throws Exception {
         int orderId = serveClient.addNewOrder(order);
         if (orderId == 0) {
-            return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Order>(HttpStatus.CONFLICT);
         }
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(builder.path("/addOrder/{id}").buildAndExpand(orderId).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
-
+        headers.setLocation(builder.path("pizza/getOrder/{id}").buildAndExpand(orderId).toUri());
+        RestTemplate restTemplate = new RestTemplate();
+        URI uri = headers.getLocation();
+        HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
+        ResponseEntity<Order> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, Order.class);
+        Order ord = responseEntity.getBody();
+        return new ResponseEntity<Order>(ord, HttpStatus.CREATED);
     }
 
     @GetMapping("getOrder/{id}")
-    public ResponseEntity<Order> getOrderDetailsById(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<Order> getOrderDetailsById(@PathVariable("id")
+                                                     @Min(value = 1, message = "id must be greater than or equal to 1")
+                                                     @Max(value = 1000, message = "id must be lower than or equal to 1000") Integer id) throws Exception {
         Order order = serveClient.getOrderDetailsById(id);
         if (order == null) {
             return new ResponseEntity<Order>(order, HttpStatus.NO_CONTENT);

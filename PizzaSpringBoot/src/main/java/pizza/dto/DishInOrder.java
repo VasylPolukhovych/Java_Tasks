@@ -1,7 +1,15 @@
 package pizza.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 public class DishInOrder {
+
+    @NotNull(message = "Name dish is mandatory")
     private Dish dish;
+
+    @NotNull(message = "Count of dish is mandatory")
+    @Positive(message = "Count of dish must be > 0")
     private int count;
     private int orderId;
     private String message;
