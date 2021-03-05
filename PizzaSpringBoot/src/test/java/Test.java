@@ -85,16 +85,16 @@ public class Test {
         int tip = 7;
         int orderId = 9;
         Test util = new Test();
-        util.getMenu();
-        util.addCookedDish("Pizza3", 15, 15);
-        util.addCookedDish("Cola", 15, 15);
-        util.getOrderDetailsById(orderId);
-        selectedDishes.add(new DishInOrder(new Dish("Cola"), 2));
-        selectedDishes.add(new DishInOrder(new Dish("Pizza3"), 2));
-        util.addOrder(selectedDishes, tip);
+        //util.getMenu();
+        //util.addCookedDish("Pizza3", 10, 10);
+        //util.addCookedDish("Cola", 10, 10);
+        //util.getOrderDetailsById(orderId);
+        //selectedDishes.add(new DishInOrder(new Dish("Cola"), 2));
+        //selectedDishes.add(new DishInOrder(new Dish("Pizza3"), 2));
+        //util.addOrder(selectedDishes, tip);
         util.getMenu();
         //Negative Cases
-        util.getOrderDetailsById(10001);
+     //   util.getOrderDetailsById(10001);
         //util.addCookedDish("Colaooooooo", 15, 15);
         // util.addCookedDish("Col", 15, 15);
         //util.addCookedDish("Cola", -15, 15);
