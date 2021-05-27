@@ -1,5 +1,8 @@
 package pizza.dto;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.MappedCollection;
+
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.NotEmpty;
 
@@ -7,27 +10,34 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Order {
+    @Id
+    private Long id;
+
     @NotEmpty(message = "Order must contain some dish")
+    @MappedCollection(idColumn = "id_order", keyColumn = "id")
     private List<DishInOrder> selectedDishes;
     private LocalDate date;
 
     @PositiveOrZero(message = "Tip must be >= 0")
-    private int tip;
-    private int id;
+    private Integer tip;
 
-    public Order(List<DishInOrder> selectedDishes, LocalDate orderDate, int tip, int id) {
-        this.selectedDishes = selectedDishes;
+    public Order(LocalDate orderDate, Integer tip) {
         this.date = orderDate;
         this.tip = tip;
-        this.id = id;
+
     }
 
-    public Order(List<DishInOrder> selectedDishes, int tip) {
+    public Order(List<DishInOrder> selectedDishes, LocalDate orderDate, Integer tip) {
         this.selectedDishes = selectedDishes;
+        this.date = orderDate;
         this.tip = tip;
     }
 
     public Order() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public List<DishInOrder> getSelectedDishes() {
@@ -38,11 +48,11 @@ public class Order {
         return date;
     }
 
-    public int getTip() {
+    public Integer getTip() {
         return tip;
     }
 
-    public int getId() {
-        return id;
+    public void setSelectedDishes(List<DishInOrder> selectedDishes) {
+        this.selectedDishes = selectedDishes;
     }
 }

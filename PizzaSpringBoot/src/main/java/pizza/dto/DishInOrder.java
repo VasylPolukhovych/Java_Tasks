@@ -1,39 +1,64 @@
 package pizza.dto;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+@Table("dish_in_order")
 public class DishInOrder {
 
+    @Id
+    private Long id;
     @NotNull(message = "Name dish is mandatory")
-    private Dish dish;
+    @Column("name_dish")
+    private String nameDish;
 
     @NotNull(message = "Count of dish is mandatory")
     @Positive(message = "Count of dish must be > 0")
-    private int count;
-    private int orderId;
+    private Integer count;
+    @Column("id_order")
+    private Long idOrder;
     private String message;
 
-    public DishInOrder(Dish dish, int count, String message, int orderId) {
-        this.dish = dish;
-        this.count = count;
-        this.orderId = orderId;
-    }
 
-    public DishInOrder(Dish dish, int count) {
-        this.dish = dish;
+    public DishInOrder(String nameDish, Integer count) {
+        this.nameDish = nameDish;
         this.count = count;
     }
 
-    public DishInOrder() {
+    public Long getId() {
+        return id;
     }
 
-    public int getCount() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNameDish() {
+        return nameDish;
+    }
+
+    public void setNameDish(String nameDish) {
+        this.nameDish = nameDish;
+    }
+
+    public Integer getCount() {
         return count;
     }
 
-    public Dish getDish() {
-        return dish;
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
+    public Long getIdOrder() {
+        return idOrder;
+    }
+
+    public void setIdOrder(Long idOrder) {
+        this.idOrder = idOrder;
     }
 
     public String getMessage() {
@@ -43,16 +68,6 @@ public class DishInOrder {
     public void setMessage(String message) {
         this.message = message;
     }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public int getOrderId() {
-        return orderId;
-    }
-
-
 }
 
 
