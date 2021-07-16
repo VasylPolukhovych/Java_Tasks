@@ -1,15 +1,13 @@
 package pizza.exception;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import pizza.dto.CookedDishTable;
 import pizza.dto.Dish;
-import pizza.dto.Order;
 import pizza.service.DishService;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class DishValidator implements ConstraintValidator<IsDishExists, CookedDishTable> {
+public class DishValidator implements ConstraintValidator<IsDishExists, Dish> {
 
     @Autowired
     private DishService dishService;
@@ -20,13 +18,13 @@ public class DishValidator implements ConstraintValidator<IsDishExists, CookedDi
     }
 
     @Override
-    public boolean isValid(CookedDishTable cookedDishTable, ConstraintValidatorContext ctx) {
+    public boolean isValid(Dish dish, ConstraintValidatorContext ctx) {
 
-        if  (!dishService.isDishExists(cookedDishTable.getNameDish())) {
+        if  (!dishService.isDishExists(dish.getName())) {
             ctx.disableDefaultConstraintViolation();
             ctx.buildConstraintViolationWithTemplate(
-                    "Unfortunatelly, but we do not cook "+cookedDishTable.getNameDish())
-                    .addPropertyNode("nameDish").addConstraintViolation();
+                    "Unfortunatelly, but we do not cook "+dish.getName())
+                    .addPropertyNode("name").addConstraintViolation();
             return false;
         }
         return true;

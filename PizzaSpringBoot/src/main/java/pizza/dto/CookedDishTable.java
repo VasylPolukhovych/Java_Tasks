@@ -1,27 +1,31 @@
 package pizza.dto;
 
-import pizza.exception.IsDishExists;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
-@IsDishExists
+@Table("cooked_dish")
 public class CookedDishTable {
-    @NotNull
-    @Size(min = 4, message = "Name dish should have atleast 4 characters")
-    private String nameDish;
+    @Id
+    private Long id;
     @NotNull
     private Integer count;
-    @NotNull
+    @Column("current_count")
     private Integer curcount;
-    private Integer id;
+    @Column("date_of_making")
+    private LocalDate dateOfMaking;
+    @Column("id_dish")
+    private Integer idDish;
 
-    public String getNameDish() {
-        return nameDish;
+    public Long getId() {
+        return id;
     }
 
-    public void setNameDish(String nameDish) {
-        this.nameDish = nameDish;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getCount() {
@@ -40,11 +44,19 @@ public class CookedDishTable {
         this.curcount = curcount;
     }
 
-    public Integer getId() {
-        return id;
+    public LocalDate getDateOfMaking() {
+        return dateOfMaking;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setDateOfMaking(LocalDate dateOfMaking) {
+        this.dateOfMaking = dateOfMaking;
+    }
+
+    public Integer getIdDish() {
+        return idDish;
+    }
+
+    public void setIdDish(Integer idDish) {
+        this.idDish = idDish;
     }
 }
