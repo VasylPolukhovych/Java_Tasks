@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import pizza.dto.*;
@@ -36,6 +37,7 @@ public class TestPizzaController {
     private OrderRep orderRep;
 
     @Test
+    @WithMockUser(value = "user1@gmail.com", password = "user1", roles = {"USER"})
     public void getDishByNameAPI() throws Exception {
         String name = "Pizza3";
         Dish ds = dishRep.findByName(name).orElse(null);
@@ -47,6 +49,7 @@ public class TestPizzaController {
     }
 
     @Test
+    @WithMockUser(value = "user1@gmail.com", password = "user1", roles = {"USER"})
     public void getCurrentMenuAPI() throws Exception {
         mvc.perform(
                 get("/pizza/menu"))
@@ -55,6 +58,16 @@ public class TestPizzaController {
     }
 
     @Test
+    @WithMockUser(value = "user123@gmail.com", password = "user123", roles = {"UNKNOWN"})
+    public void getCurrentMenuByIncorrectUserAPI() throws Exception {
+        mvc.perform(
+                get("/pizza/menu"))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(value = "user1@gmail.com", password = "user1", roles = {"USER"})
     public void getCookedDishesAPI() throws Exception {
         List<Dish> dishes = dishRep.findAll();
         mvc.perform(
@@ -64,6 +77,7 @@ public class TestPizzaController {
     }
 
     @Test
+    @WithMockUser(value = "user1@gmail.com", password = "user1", roles = {"USER"})
     public void getOrderDetailsByIdAPI() throws Exception {
         Long orderId = Long.valueOf(41);
         Order order = orderRep.findById(orderId).orElse(null);
@@ -77,6 +91,7 @@ public class TestPizzaController {
     }
 
     @Test
+    @WithMockUser(value = "user2@gmail.com", password = "user2", roles = {"USER"})
     public void addCookedDishAPI() throws Exception {
         Dish dish = dishRep.findByName("Cola").orElse(null);
         CookedDish cookedDish = new CookedDish();
@@ -92,6 +107,7 @@ public class TestPizzaController {
     }
 
     @Test
+    @WithMockUser(value = "user1@gmail.com", password = "user1", roles = {"USER"})
     public void addCookedDishIncorrectInputDataAPI() throws Exception {
         Dish dish = dishRep.findByName("Cola").orElse(null);
 
@@ -107,6 +123,7 @@ public class TestPizzaController {
     }
 
     @Test
+    @WithMockUser(value = "user1@gmail.com", password = "user1", roles = {"USER"})
     public void getOrderDetailsByIncorrectIdAPI() throws Exception {
         mvc.perform(
                 get("/pizza/getOrder/1007"))
@@ -116,6 +133,7 @@ public class TestPizzaController {
     }
 
     @Test
+    @WithMockUser(value = "nalench7@gmail.com", password = "admin", roles = {"ADMIN"})
     public void addOrderAPI() throws Exception {
         List<DishInOrder> selectedDishes = new ArrayList<>();
         int tip = 7;
