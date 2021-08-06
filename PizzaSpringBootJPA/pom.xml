@@ -75,26 +75,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-hateoas -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webflux -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webflux</artifactId>
-            <version>5.3.9</version>
-        </dependency>
-
-        <dependency>
-
         <groupId>org.springframework.security</groupId>
-
         <artifactId>spring-security-test</artifactId>
-
         <scope>test</scope>
-
     </dependency>
     </dependencies>
     <build>
