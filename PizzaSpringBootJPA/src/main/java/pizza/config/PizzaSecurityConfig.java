@@ -39,10 +39,8 @@ public class PizzaSecurityConfig extends WebSecurityConfigurerAdapter {
                         uriBuilder = UriComponentsBuilder
                                 .fromUriString(pizzaProperties.getFindUserByEmailUri())
                                 .queryParam("email", username);
-                        Map<String, String> params = new HashMap<>();
-                        params.put("email", username);
                         Employee empl = restTemplate
-                                .getForObject(uriBuilder.toUriString(), Employee.class, params);
+                                .getForObject(uriBuilder.toUriString(), Employee.class);
                         if (empl != null) {
                             PasswordEncoder encoder = PasswordEncoderFactories
                                     .createDelegatingPasswordEncoder();

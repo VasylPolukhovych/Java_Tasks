@@ -33,9 +33,8 @@ public class EmployeeController {
     public ResponseEntity<Object> getUser(@RequestParam(name = "email") String userName) {
         UserDetails userDetails = employeeDetailsService.loadUserByUsername(userName);
         if (userDetails == null) {
-            return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        ResponseEntity<UserDetails> responseEntity = new ResponseEntity<UserDetails>(userDetails, HttpStatus.OK);
         return new ResponseEntity<Object>(userDetails, HttpStatus.OK);
     }
 
@@ -44,7 +43,7 @@ public class EmployeeController {
                                                       String userName) {
         Employee employee = employeeDetailsService.getEmployeeByUsername(userName);
         if (employee == null) {
-            return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         ResponseEntity<Employee> responseEntity = new ResponseEntity<Employee>(employee, HttpStatus.OK);
         return new ResponseEntity<Object>(employee, HttpStatus.OK);
@@ -54,7 +53,7 @@ public class EmployeeController {
     public ResponseEntity<Object> getUser() {
         List<Employee> emplList = employeeDetailsService.findAll();
         if (emplList == null) {
-            return new ResponseEntity<Object>(HttpStatus.CONFLICT);
+            return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<Object>(emplList, HttpStatus.OK);
     }
