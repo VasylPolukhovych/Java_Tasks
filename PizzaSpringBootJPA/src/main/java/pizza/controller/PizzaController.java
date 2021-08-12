@@ -1,6 +1,7 @@
 package pizza.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
@@ -8,16 +9,20 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.util.UriComponentsBuilder;
+import pizza.config.PizzaProperties;
 import pizza.dto.CookedDish;
 import pizza.dto.Dish;
 import pizza.dto.Order;
 import pizza.service.CookedDishService;
 import pizza.service.DishService;
+import pizza.service.LoadDataFromExcel;
 import pizza.service.ServeClient;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -31,6 +36,11 @@ public class PizzaController {
     private CookedDishService cookedDishService;
     @Autowired
     private ServeClient serveClient;
+    @Autowired
+    LoadDataFromExcel loadDataFromExcel;
+
+    @Value(value = "${pizza.path-for-loading-from-excel}")
+    String inFolder;
 
     @GetMapping("getDish/{name}")
     public ResponseEntity<Object> getOrderDetailsById(@PathVariable("name")
@@ -72,12 +82,21 @@ public class PizzaController {
         return new ResponseEntity<Object>(result, HttpStatus.CREATED);
     }
 
+    @PostMapping(value = "addFromExcel/{fileName}")
+    public ResponseEntity<Object> addCookedDishFromExcel(@PathVariable("fileName") String fileName
+    ) throws IOException, IllegalAccessException {
+        List<CookedDish> result = new ArrayList<>();
+        result = loadDataFromExcel.readFromExcel(inFolder + fileName);
+        if (result == null) {
+            return new ResponseEntity<Object>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<Object>(result, HttpStatus.CREATED);
+    }
 
     @GetMapping("getOrder/{id}")
     public ResponseEntity<Object> getOrderDetailsById(@PathVariable("id")
                                                       @Min(value = 1, message = "Error. Id must be greater than or equal to 1")
-                                                      @Max(value = 1000, message = "Error. Id must be lower than or equal to 1000") Long id
-    ) {
+                                                      @Max(value = 1000, message = "Error. Id must be lower than or equal to 1000") Long id) {
         Order order = serveClient.getOrderDetailsById(id);
         if (order == null) {
             return new ResponseEntity<Object>(HttpStatus.CONFLICT);

@@ -24,6 +24,16 @@ public class CookedDish {
 
     private Long idDish;
 
+    public CookedDish() {
+    }
+
+    public CookedDish(Integer count, Integer curcount, LocalDate dateOfMaking, Long idDish) {
+        this.count = count;
+        this.curcount = curcount;
+        this.dateOfMaking = dateOfMaking;
+        this.idDish = idDish;
+    }
+
     public Long getId() {
         return id;
     }
