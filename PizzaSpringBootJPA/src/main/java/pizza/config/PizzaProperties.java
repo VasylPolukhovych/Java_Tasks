@@ -8,7 +8,6 @@ public class PizzaProperties {
     private String findUserByEmailUri;
     private String username;
     private String password;
-
     public PizzaProperties() {
     }
 
@@ -43,4 +42,5 @@ public class PizzaProperties {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }
